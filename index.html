@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KISH 교사 밴드부 플레이리스트</title>
+  <style>
+    :root{
+      --bg:#0b0c10;--card:#13151a;--muted:#8a8f98;--text:#e7ecf3;--accent:#58a6ff;--accent-2:#7ee787;--danger:#ff6b6b;--border:#242834;
+      --radius:16px
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Pretendard,Apple SD Gothic Neo,Noto Sans KR,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
+    h1{margin:0;font-size:clamp(22px,4vw,34px);font-weight:800;letter-spacing:-.3px}
+    .subbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0 16px}
+    .search{display:flex;gap:8px;align-items:center;background:var(--card);padding:10px 12px;border-radius:12px;border:1px solid var(--border);min-width:280px}
+    .search input{all:unset;width:220px}
+    .search select{background:transparent;border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:8px}
+    .pill{font-size:12px;color:var(--muted)}
+
+    .btn{border:1px solid var(--border);background:var(--card);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer;transition:.15s;display:inline-flex;gap:8px;align-items:center}
+    .btn:hover{transform:translateY(-1px);border-color:#2f3442}
+    .btn.primary{background:linear-gradient(180deg,#1e2837,#1a2331);border-color:#2b3242}
+    .btn.accent{background:var(--accent);border-color:transparent;color:#0b1220}
+
+    .fab{position:fixed;right:24px;bottom:24px;padding:14px 16px;border-radius:14px;background:var(--accent);color:#0b1220;font-weight:700;box-shadow:0 10px 24px rgba(0,0,0,.35);border:none;cursor:pointer}
+
+    .list{display:grid;gap:10px}
+    .row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px}
+    .rowHead{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+    .titleLine{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .title{font-weight:700}
+    .muted{color:var(--muted)}
+    .tag{font-size:12px;color:#0b1220;background:var(--accent-2);padding:2px 8px;border-radius:999px}
+    .rowBtns{display:flex;gap:6px}
+    .rowBtns .icon{background:transparent;border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:10px;cursor:pointer}
+
+    details{margin-top:10px}
+    details summary{cursor:pointer;color:var(--muted)}
+    table.parts{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:8px}
+    table.parts th, table.parts td{padding:10px 12px;text-align:left}
+    table.parts th{color:#c9d1d9;font-weight:700}
+    table.parts tr{background:#0f1117;border:1px solid var(--border)}
+    table.parts tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
+    table.parts tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
+
+    .empty{color:var(--muted);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:12px;background:rgba(255,255,255,0.02)}
+
+    dialog{border:none;border-radius:16px;padding:0;max-width:980px;width:96vw;background:var(--card);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.5);}
+    .dlgHead{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--border)}
+    .dlgBody{padding:16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .grid .field{display:flex;flex-direction:column;gap:6px}
+    label{font-size:12px;color:var(--muted)}
+    input[type="text"], input[type="url"]{border:1px solid var(--border);background:#0f1117;color:var(--text);padding:10px 12px;border-radius:10px}
+
+    .partsEditor{margin-top:12px}
+    .partsEditor table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    .partsEditor th,.partsEditor td{padding:8px 10px;text-align:left}
+    .partsEditor th{color:#c9d1d9}
+    .partsEditor tr{background:#0f1117;border:1px solid var(--border)}
+    .partsEditor tr td:first-child{font-weight:700}
+    .dlgFoot{display:flex;justify-content:flex-end;gap:8px;padding:16px;border-top:1px solid var(--border)}
+
+    .autocomplete{position:relative}
+    .ac-menu{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:6px;z-index:10;overflow:hidden}
+    .ac-item{padding:10px 12px;cursor:pointer;border-top:1px solid var(--border)}
+    .ac-item:first-child{border-top:none}
+    .ac-item:hover{background:#1a1f2b}
+
+    .partsHeader{display:flex;justify-content:space-between;align-items:center;margin:12px 0 6px}
+    .miniDel{margin-left:8px;border:1px solid var(--border);background:#141922;color:var(--muted);padding:2px 6px;border-radius:8px;cursor:pointer;font-size:12px}
+    .miniDel:hover{color:#fff}
+
+    @media (max-width:760px){
+      .grid{grid-template-columns:1fr}
+      .rowHead{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎵 KISH 교사 밴드부 플레이리스트</h1>
+      <button id="addBtn" class="btn accent" title="곡 추가">+ 곡 추가</button>
+    </header>
+
+    <div class="subbar">
+      <div class="search" role="search">
+        <select id="searchField" aria-label="검색 필드">
+          <option value="title">제목</option>
+          <option value="artist">가수</option>
+        </select>
+        <div class="autocomplete" style="flex:1">
+          <input id="searchInput" type="text" placeholder="검색어 입력 (자동완성)" aria-label="검색" autocomplete="off" />
+          <div id="acMenu" class="ac-menu" style="display:none"></div>
+        </div>
+        <button id="clearSearch" class="btn" title="검색 지우기">지우기</button>
+      </div>
+      <span class="pill">정렬: 한글 자음 순 (제목)</span>
+      <button id="exportBtn" class="btn" title="JSON 내보내기">내보내기</button>
+      <label class="btn" for="importFile" title="JSON 가져오기">가져오기<input id="importFile" type="file" accept="application/json" style="display:none"/></label>
+    </div>
+
+    <div id="list" class="list"></div>
+    <div id="empty" class="empty" style="display:none">아직 등록된 곡이 없습니다. 우측 하단 또는 상단의 <b>+ 곡 추가</b> 버튼을 눌러 시작하세요.</div>
+  </div>
+
+  <button id="fab" class="fab">+ 곡 추가</button>
+
+  <!-- Add/Edit Dialog -->
+  <dialog id="songDlg">
+    <form id="songForm" method="dialog">
+      <div class="dlgHead">
+        <div style="font-weight:800">곡 정보 입력</div>
+        <button id="closeDlg" class="btn" value="cancel" type="button">닫기</button>
+      </div>
+      <div class="dlgBody">
+        <div class="grid">
+          <div class="field"><label for="title">제목*</label><input id="title" name="title" type="text" required /></div>
+          <div class="field"><label for="artist">가수*</label><input id="artist" name="artist" type="text" required /></div>
+          <div class="field"><label for="version">버전</label><input id="version" name="version" type="text" placeholder="예: 원곡/어쿠/락ver." /></div>
+        </div>
+
+        <div class="partsEditor">
+          <div class="partsHeader">
+            <label style="display:block;color:#c9d1d9;font-weight:700">파트별 담당자/링크/공유</label>
+            <button id="addPartBtn" type="button" class="btn" title="파트 추가">+ 파트 추가</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:180px">파트</th>
+                <th style="width:28%">담당자</th>
+                <th>예시 링크(유튜브 등)</th>
+                <th>기타/공유(드라이브 등)</th>
+              </tr>
+            </thead>
+            <tbody id="partsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="dlgFoot">
+        <button class="btn" value="cancel" type="button" id="cancelBtn">취소</button>
+        <button class="btn primary" id="saveBtn" type="submit">완료</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    // ==== Data & Utils ====
+    const DEFAULT_PARTS = [
+      { key:'1stKeys',  label:'1st 건반', builtin:true },
+      { key:'2ndKeys',  label:'2nd 건반', builtin:true },
+      { key:'1stElec',  label:'1st 일렉', builtin:true },
+      { key:'2ndElec',  label:'2nd 일렉', builtin:true },
+      { key:'Acoustic', label:'어쿠스틱 기타', builtin:true },
+      { key:'Bass',     label:'베이스 기타', builtin:true },
+      { key:'Drums',    label:'드럼', builtin:true },
+      { key:'Vocal1',   label:'보컬 1', builtin:true },
+      { key:'Vocal2',   label:'보컬 2', builtin:true },
+      { key:'Vocal3',   label:'보컬 3', builtin:true },
+    ];
+
+    const collator = new Intl.Collator('ko', { sensitivity: 'base', numeric: true });
+    const LS_KEY = 'kish_band_playlist_v1';
+
+    // ---- Helpers for dynamic parts ----
+    const slugify = (s)=> s.toString().trim()
+      .replace(/\s+/g,'-')
+      .replace(/[^\w\-가-힣]/g,'')
+      .replace(/\-+/g,'-')
+      .toLowerCase() || ('p-'+Math.random().toString(36).slice(2,7));
+
+    const uniqueKey = (base, used)=>{
+      let k = base; let i=2;
+      while(used.has(k)) { k = base+"-"+i++; }
+      return k;
+    };
+
+    const cloneDefaults = ()=> DEFAULT_PARTS.map(p=> ({ key:p.key, label:p.label, player:'', ref:'', misc:'', builtin:true }));
+
+    function normalizeSong(s){
+      if(Array.isArray(s.parts)){
+        // ensure shape
+        s.parts = s.parts.map(p=> ({
+          key: p.key || slugify(p.label||'part'),
+          label: p.label || p.key || '파트',
+          player: p.player || '',
+          ref: p.ref || '',
+          misc: p.misc || '',
+          builtin: !!p.builtin && DEFAULT_PARTS.some(d=>d.key===p.key)
+        }));
+        return s;
+      }
+      // legacy object -> array
+      const arr = [];
+      const obj = s.parts || {};
+      const used = new Set();
+      DEFAULT_PARTS.forEach(d=>{
+        const pr = obj[d.key] || {player:'',ref:'',misc:''};
+        arr.push({ key:d.key, label:d.label, player:pr.player||'', ref:pr.ref||'', misc:pr.misc||'', builtin:true });
+        used.add(d.key);
+      });
+      // include any extra custom keys
+      Object.keys(obj).forEach(k=>{
+        if(!used.has(k)){
+          const pr = obj[k] || {player:'',ref:'',misc:''};
+          arr.push({ key:k, label:k, player:pr.player||'', ref:pr.ref||'', misc:pr.misc||'', builtin:false });
+        }
+      });
+      s.parts = arr;
+      return s;
+    }
+
+    function normalizeAllSongs(list){
+      return (list||[]).map(normalizeSong);
+    }
+
+    const uid = () => 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+    function defaultSong(){
+      return { id: uid(), title:'', artist:'', version:'', parts: cloneDefaults() };
+    }
+
+    function loadSongs(){
+      try{ return JSON.parse(localStorage.getItem(LS_KEY)) || []; }catch(e){ return []; }
+    }
+    function saveSongs(arr){ localStorage.setItem(LS_KEY, JSON.stringify(arr)); }
+
+    // ==== State ====
+    let songs = normalizeAllSongs(loadSongs());
+    saveSongs(songs); // migrate if needed
+    let editingId = null; // null: add, otherwise edit
+    let editingParts = []; // array of {key,label,player,ref,misc,builtin}
+
+    // ==== DOM ====
+    const listEl = document.getElementById('list');
+    const emptyEl = document.getElementById('empty');
+    const addBtn = document.getElementById('addBtn');
+    const fab = document.getElementById('fab');
+
+    const songDlg = document.getElementById('songDlg');
+    const songForm = document.getElementById('songForm');
+    const closeDlg = document.getElementById('closeDlg');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    const titleInput = document.getElementById('title');
+    const artistInput = document.getElementById('artist');
+    const versionInput = document.getElementById('version');
+    const partsTbody = document.getElementById('partsTbody');
+    const addPartBtn = document.getElementById('addPartBtn');
+
+    const searchField = document.getElementById('searchField');
+    const searchInput = document.getElementById('searchInput');
+    const acMenu = document.getElementById('acMenu');
+    const clearSearch = document.getElementById('clearSearch');
+    const exportBtn = document.getElementById('exportBtn');
+    const importFile = document.getElementById('importFile');
+
+    // ==== Parts Editor ====
+    function buildPartsEditor(){
+      partsTbody.innerHTML = '';
+      editingParts.forEach(p=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <span class="part-label">${p.label}</span>
+            ${p.builtin ? '' : `<button type="button" class="miniDel" data-key="${p.key}">삭제</button>`}
+          </td>
+          <td><input type="text" data-key="${p.key}" data-field="player" placeholder="담당자 이름" value="${p.player || ''}"></td>
+          <td><input type="url" data-key="${p.key}" data-field="ref" placeholder="예시 링크 (https://)" value="${p.ref || ''}"></td>
+          <td><input type="url" data-key="${p.key}" data-field="misc" placeholder="기타/공유 링크 (https://)" value="${p.misc || ''}"></td>
+        `;
+        partsTbody.appendChild(tr);
+      });
+    }
+
+    function addCustomPart(){
+      const name = prompt('추가할 파트 이름을 입력하세요');
+      if(!name) return;
+      const base = slugify(name);
+      const used = new Set(editingParts.map(p=>p.key));
+      const key = uniqueKey(base, used);
+      editingParts.push({ key, label:name.trim(), player:'', ref:'', misc:'', builtin:false });
+      buildPartsEditor();
+    }
+
+    addPartBtn.addEventListener('click', addCustomPart);
+
+    partsTbody.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.miniDel');
+      if(!btn) return;
+      const key = btn.dataset.key;
+      const idx = editingParts.findIndex(p=>p.key===key);
+      if(idx>-1){
+        if(editingParts[idx].builtin){ alert('기본 파트는 삭제할 수 없습니다.'); return; }
+        editingParts.splice(idx,1);
+        buildPartsEditor();
+      }
+    });
+
+    // ==== Render ====
+    function render(){
+      const q = searchInput.value.trim();
+      const field = searchField.value; // 'title' or 'artist'
+
+      const filtered = songs
+        .slice()
+        .sort((a,b)=> collator.compare(a.title||'', b.title||''))
+        .filter(s=> {
+          if(!q) return true;
+          const t = (s[field]||'').toLowerCase();
+          return t.includes(q.toLowerCase());
+        });
+
+      listEl.innerHTML = '';
+      if(filtered.length === 0){ emptyEl.style.display = 'block'; return; }
+      emptyEl.style.display = 'none';
+
+      filtered.forEach((s, idx)=>{
+        const row = document.createElement('div');
+        row.className = 'row';
+
+        const head = document.createElement('div');
+        head.className = 'rowHead';
+
+        const titleLine = document.createElement('div');
+        titleLine.className = 'titleLine';
+        const title = document.createElement('div');
+        title.className = 'title';
+        title.textContent = `${idx+1}. ${s.title}`;
+        const meta = document.createElement('div');
+        meta.className = 'muted';
+        meta.textContent = ` · ${s.artist}${s.version? ' · '+s.version : ''}`;
+        titleLine.appendChild(title);
+        titleLine.appendChild(meta);
+
+        const btns = document.createElement('div');
+        btns.className = 'rowBtns';
+        const editBtn = document.createElement('button');
+        editBtn.className = 'icon';
+        editBtn.textContent = '편집';
+        editBtn.addEventListener('click', ()=> openEdit(s.id));
+        const delBtn = document.createElement('button');
+        delBtn.className = 'icon';
+        delBtn.style.color = 'var(--danger)';
+        delBtn.textContent = '삭제';
+        delBtn.addEventListener('click', ()=> doDelete(s.id));
+        btns.appendChild(editBtn);
+        btns.appendChild(delBtn);
+
+        head.appendChild(titleLine);
+        head.appendChild(btns);
+
+        const det = document.createElement('details');
+        const sum = document.createElement('summary');
+        sum.textContent = '자세히 보기';
+        det.appendChild(sum);
+
+        // parts table
+        const tbl = document.createElement('table');
+        tbl.className = 'parts';
+        const thead = document.createElement('thead');
+        thead.innerHTML = `<tr><th>파트</th><th>담당자</th><th>예시 링크</th><th>기타/공유</th></tr>`;
+        const tbody = document.createElement('tbody');
+        (s.parts||[]).forEach(p=>{
+          const linkA = p.ref ? `<a href="${p.ref}" target="_blank" rel="noopener">열기</a>` : '<span class="muted">-</span>';
+          const linkB = p.misc ? `<a href="${p.misc}" target="_blank" rel="noopener">열기</a>` : '<span class="muted">-</span>';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${p.label}</td>
+            <td>${p.player || '<span class=\"muted\">(미정)</span>'}</td>
+            <td>${linkA}</td>
+            <td>${linkB}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+        tbl.appendChild(thead);
+        tbl.appendChild(tbody);
+        det.appendChild(tbl);
+
+        row.appendChild(head);
+        row.appendChild(det);
+        listEl.appendChild(row);
+      });
+    }
+
+    // ==== Open/Save/Delete ====
+    function openAdd(){
+      editingId = null;
+      const s = defaultSong();
+      titleInput.value = '';
+      artistInput.value = '';
+      versionInput.value = '';
+      editingParts = s.parts.map(p=>({...p}));
+      buildPartsEditor();
+      songDlg.showModal();
+      setTimeout(()=> titleInput.focus(), 50);
+    }
+
+    function openEdit(id){
+      const s = songs.find(x=>x.id===id);
+      if(!s) return;
+      editingId = id;
+      const sn = normalizeSong({...s});
+      titleInput.value = sn.title || '';
+      artistInput.value = sn.artist || '';
+      versionInput.value = sn.version || '';
+      editingParts = (sn.parts||[]).map(p=>({...p}));
+      buildPartsEditor();
+      songDlg.showModal();
+      setTimeout(()=> titleInput.focus(), 50);
+    }
+
+    function gatherParts(){
+      const map = new Map(editingParts.map(p=> [p.key, p] ));
+      partsTbody.querySelectorAll('input').forEach(inp=>{
+        const key = inp.dataset.key;
+        const field = inp.dataset.field; // player | ref | misc
+        if(key && field && map.has(key)){
+          map.get(key)[field] = inp.value.trim();
+        }
+      });
+      return Array.from(map.values());
+    }
+
+    function doDelete(id){
+      if(!confirm('이 곡을 삭제할까요?')) return;
+      songs = songs.filter(s=> s.id!==id);
+      saveSongs(songs);
+      render();
+    }
+
+    songForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const title = titleInput.value.trim();
+      const artist = artistInput.value.trim();
+      const version = versionInput.value.trim();
+      if(!title || !artist){
+        alert('제목과 가수를 입력해주세요.');
+        return;
+      }
+      const parts = gatherParts();
+
+      if(editingId){
+        songs = songs.map(s=> s.id===editingId ? { ...s, title, artist, version, parts } : s);
+      }else{
+        songs.push({ id: uid(), title, artist, version, parts });
+      }
+      saveSongs(songs);
+      songDlg.close();
+      render();
+    });
+
+    [closeDlg, cancelBtn].forEach(b=> b.addEventListener('click', ()=> songDlg.close()));
+    addBtn.addEventListener('click', openAdd);
+    fab.addEventListener('click', openAdd);
+
+    // ==== Search & Autocomplete ====
+    let acTimer = null;
+    function updateAutocomplete(){
+      const q = searchInput.value.trim().toLowerCase();
+      const field = searchField.value;
+      if(!q){ acMenu.style.display='none'; acMenu.innerHTML=''; render(); return; }
+      const candidates = songs
+        .map(s=> s[field] || '')
+        .filter(Boolean)
+        .filter((v,i,arr)=> arr.indexOf(v)===i) // unique
+        .filter(v=> v.toLowerCase().includes(q))
+        .sort((a,b)=> collator.compare(a,b))
+        .slice(0,8);
+      if(candidates.length===0){ acMenu.style.display='none'; acMenu.innerHTML=''; render(); return; }
+      acMenu.innerHTML = candidates.map(v=> `<div class="ac-item" data-value="${v.replaceAll('"','&quot;')}">${v}</div>`).join('');
+      acMenu.style.display='block';
+    }
+
+    searchInput.addEventListener('input', ()=>{
+      clearTimeout(acTimer);
+      acTimer = setTimeout(()=>{ updateAutocomplete(); render(); }, 200);
+    });
+    searchField.addEventListener('change', ()=>{ updateAutocomplete(); render(); });
+    acMenu.addEventListener('click', (e)=>{
+      const item = e.target.closest('.ac-item');
+      if(!item) return;
+      searchInput.value = item.dataset.value || '';
+      acMenu.style.display='none';
+      render();
+    });
+    document.addEventListener('click', (e)=>{
+      if(!acMenu.contains(e.target) && e.target!==searchInput){ acMenu.style.display='none'; }
+    });
+
+    clearSearch.addEventListener('click', ()=>{ searchInput.value=''; acMenu.style.display='none'; render(); });
+
+    // ==== Import/Export ====
+    exportBtn.addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(songs,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'kish_band_playlist.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    importFile.addEventListener('change', async (e)=>{
+      const file = e.target.files?.[0];
+      if(!file) return;
+      try{
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if(!Array.isArray(data)) throw new Error('형식 오류');
+        songs = normalizeAllSongs(data);
+        saveSongs(songs);
+        render();
+      }catch(err){
+        alert('가져오기 실패: JSON 형식을 확인하세요.');
+      } finally {
+        importFile.value = '';
+      }
+    });
+
+    // Initial
+    render();
+  </script>
+</body>
+</html>
