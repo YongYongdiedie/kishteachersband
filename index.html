@@ -41,6 +41,8 @@
     /* Auth */
     .authWrap{max-width:560px;margin:40px auto}
     .tabsAuth{display:flex;gap:8px;margin-bottom:12px}
+    .tabsAuth .tab{color:#fff;border-color:var(--border);opacity:.95}
+    .tabsAuth .tab.active{outline:2px solid var(--accent);opacity:1}
     .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
     label{font-size:12px;color:var(--muted)}
     input, select, textarea{border:1px solid var(--border);background:#0f1117;color:#e7ecf3;padding:10px 12px;border-radius:10px}
@@ -101,6 +103,9 @@
         <div class="field"><label>비밀번호</label><input id="loginPw" type="password" placeholder="비밀번호"></div>
         <button class="btn accent" id="loginBtn">로그인</button>
         <div class="muted" style="margin-top:10px">관리자: <b>admin</b> / 비밀번호 <b>1111</b></div>
+        <div class="muted" style="margin-top:10px; text-align:right">
+          <button class="btn ghost" id="initBtn" title="저장된 데이터 초기화">환경 초기화</button>
+        </div>
       </div>
       <div id="signupPane" class="card" style="display:none">
         <div class="field"><label>이름</label><input id="suName" type="text" placeholder="실명 입력"></div>
@@ -414,10 +419,17 @@
       const dt = new Date(d);
       return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
     };
-    const hashHex = async (text)=>{
-      const buf = new TextEncoder().encode(text);
-      const digest = await crypto.subtle.digest('SHA-256', buf);
-      return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    async function hashHex(text){
+      try{
+        if(window.crypto && window.crypto.subtle){
+          const buf = new TextEncoder().encode(text);
+          const digest = await crypto.subtle.digest('SHA-256', buf);
+          return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        }
+      }catch(e){ /* fall through */ }
+      // Fallback hash (DJB2) for non-secure contexts (e.g., file://)
+      let h = 5381; for(let i=0;i<text.length;i++){ h=((h<<5)+h)+text.charCodeAt(i); h|=0; }
+      return 'x'+(h>>>0).toString(16);
     };
 
     const read = (k, def)=>{ try{ return JSON.parse(localStorage.getItem(k)) ?? def; }catch(e){ return def; } };
@@ -1148,7 +1160,21 @@
     });
 
     loginBtn.addEventListener('click', async ()=>{
-      const name=loginName.value.trim(); const pw=loginPw.value; if(!name||!pw){ alert('이름/비밀번호를 입력하세요.'); return; }
+      const name=loginName.value.trim();
+
+    // Quick init/reset & Enter-to-login
+    const initBtn = document.getElementById('initBtn');
+    if(initBtn){
+      initBtn.addEventListener('click', ()=>{
+        if(!confirm('로컬 저장소의 데이터를 초기화할까요? (곡/사용자/게시글/로그/세션)')) return;
+        try{
+          [LS_SONGS,LS_USERS,LS_SIGNUPS,LS_POSTS,LS_SESSION,LS_LOGS].forEach(k=> localStorage.removeItem(k));
+        }catch(e){}
+        alert('초기화 완료. 페이지를 새로고침합니다.');
+        location.reload();
+      });
+    }
+    [loginName, loginPw].forEach(el=> el && el.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ loginBtn.click(); }})); const pw=loginPw.value; if(!name||!pw){ alert('이름/비밀번호를 입력하세요.'); return; }
       if(name==='admin'){
         if(pw==='1111'){ session={name}; write(LS_SESSION, session); enterApp(); }
         else alert('관리자 비밀번호가 올바르지 않습니다.');
