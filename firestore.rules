@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() { return request.auth != null; }
+    function adminEmail() { return "admin@kishband.org"; } // <-- 바꿔주세요 (firebase-config.js의 ADMIN_EMAIL과 동일)
+    function userDoc(uid) { return get(/databases/$(database)/documents/users/$(uid)); }
+    function isApproved() { return isSignedIn() && userDoc(request.auth.uid).data.approved == true; }
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == adminEmail() ||
+        (userDoc(request.auth.uid).data.role == 'admin')
+      );
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn() && (isAdmin() || request.auth.uid == uid);
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      // 자신 문서 수정: role 변경 불가 (단, adminEmail은 허용)
+      allow update: if isSignedIn() && request.auth.uid == uid &&
+        (!('role' in request.resource.data) || request.resource.data.role == 'member') ||
+        (isSignedIn() && request.auth.token.email == adminEmail());
+      // 관리자 전체 수정 허용
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /songs/{id} {
+      allow read: if isSignedIn() && isApproved();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /posts/{id} {
+      allow read: if isSignedIn() && isApproved();
+      allow create: if isSignedIn() && isApproved();
+      allow update, delete: if isSignedIn() && (isAdmin() || request.resource.data.authorUid == request.auth.uid);
+      match /comments/{cid} {
+        allow read: if isSignedIn() && isApproved();
+        allow create: if isSignedIn() && isApproved();
+        allow update, delete: if isSignedIn() && (isAdmin() || request.resource.data.authorUid == request.auth.uid);
+      }
+    }
+
+    match /logs/{id} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}

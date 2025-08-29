@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KISH 교사 밴드 포털 v3</title>
+  <title>KISH 교사 밴드 포털 · Cloud</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🎵 KISH 교사 밴드 포털 v3</h1>
+      <h1>🎵 KISH 교사 밴드 포털 · Cloud</h1>
       <div class="headBtns" id="userBar" style="display:none"></div>
     </header>
 
@@ -20,17 +20,15 @@
         <button class="tab" id="tabSignup">회원가입</button>
       </div>
       <div id="loginPane" class="card">
-        <div class="field"><label>이름</label><input id="loginName" type="text" placeholder="예: 김철수"></div>
+        <div class="field"><label>이메일</label><input id="loginEmail" type="email" placeholder="예: admin@kishband.org"></div>
         <div class="field"><label>비밀번호</label><input id="loginPw" type="password" placeholder="비밀번호"></div>
         <button class="btn accent" id="loginBtn">로그인</button>
-        <div class="muted" style="margin-top:10px">관리자: <b>admin</b> / 비밀번호 <b>1111</b></div>
-        <div class="muted" style="margin-top:10px; text-align:right">
-          <button class="btn ghost" id="initBtn" title="저장된 데이터 초기화">환경 초기화</button>
-        </div>
+        <div class="muted" style="margin-top:10px">관리자(최초): <b>ADMIN_EMAIL</b></div>
       </div>
       <div id="signupPane" class="card" style="display:none">
         <div class="field"><label>이름</label><input id="suName" type="text" placeholder="실명 입력"></div>
-        <div class="field"><label>비밀번호</label><input id="suPw" type="password" placeholder="비밀번호"></div>
+        <div class="field"><label>이메일(로그인용)</label><input id="suEmail" type="email" placeholder="예: you@school.kr"></div>
+        <div class="field"><label>비밀번호</label><input id="suPw" type="password" placeholder="비밀번호(6자 이상)"></div>
         <div class="field"><label>비밀번호 확인</label><input id="suPw2" type="password" placeholder="비밀번호 확인"></div>
         <div class="field"><label>부서</label><input id="suDept" type="text" placeholder="예: 과학과"></div>
         <div class="field"><label>담당 파트</label>
@@ -45,7 +43,7 @@
         </div>
         <div class="field" id="suPartCustomWrap" style="display:none"><label>담당 파트(직접입력)</label><input id="suPartCustom" type="text" placeholder="예: 색소폰"></div>
         <button class="btn accent" id="signupBtn">회원가입 요청</button>
-        <div class="muted" style="margin-top:10px">※ (현재 설정) 가입 즉시 활성화됩니다.</div>
+        <div class="muted" style="margin-top:10px">※ 가입 후 관리자가 승인해야 로그인 가능합니다.</div>
       </div>
     </section>
 
@@ -107,7 +105,7 @@
         <div class="card">
           <table class="board" id="signupTable" style="border-spacing:0">
             <thead>
-              <tr><th>이름</th><th>부서</th><th>담당 파트</th><th>신청일</th><th style="width:220px">승인/거절</th></tr>
+              <tr><th>이름</th><th>이메일</th><th>부서</th><th>담당 파트</th><th>가입일</th><th style="width:240px">승인/거절</th></tr>
             </thead>
             <tbody></tbody>
           </table>
@@ -117,12 +115,11 @@
         <div style="height:16px"></div>
         <div class="rowHead" style="margin-bottom:10px">
           <div style="font-weight:700">사용자 관리</div>
-          <button class="btn" id="userAddBtn">+ 사용자 추가</button>
         </div>
         <div class="card">
           <table class="board" id="usersTable" style="border-spacing:0">
             <thead>
-              <tr><th>이름</th><th>부서</th><th>담당 파트</th><th>가입일</th><th style="width:320px">관리</th></tr>
+              <tr><th>이름</th><th>이메일</th><th>부서</th><th>담당 파트</th><th>권한</th><th style="width:360px">관리</th></tr>
             </thead>
             <tbody></tbody>
           </table>
@@ -132,19 +129,9 @@
         <div style="height:16px"></div>
         <div class="rowHead" style="margin-bottom:10px">
           <div style="font-weight:700">관리자 로그</div>
-          <div class="headBtns">
-            <button id="logsExportBtn" class="btn">내보내기</button>
-            <button id="logsClearBtn" class="btn danger">모두 비우기</button>
-          </div>
         </div>
         <div class="card">
-          <table class="logs" id="logsTable">
-            <thead>
-              <tr><th style="width:180px">시간</th><th style="width:120px">관리자</th><th style="width:160px">동작</th><th>상세</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <div id="logsEmpty" class="empty" style="display:none">로그가 없습니다.</div>
+          <div class="muted">로그는 클라우드 Firestore의 <code>logs</code> 컬렉션에 저장됩니다.</div>
         </div>
       </section>
     </section>
@@ -256,72 +243,6 @@
     </div>
   </dialog>
 
-  <!-- USER DIALOG (Admin add/edit) -->
-  <dialog id="userDlg">
-    <form id="userForm" method="dialog">
-      <div class="dlgHead">
-        <div style="font-weight:800" id="userDlgTitle">사용자 추가</div>
-        <button id="closeUserDlg" class="btn" type="button">닫기</button>
-      </div>
-      <div class="dlgBody">
-        <div class="field"><label>이름</label><input id="udName" type="text" placeholder="이름"></div>
-        <div class="field"><label>비밀번호 <span class="muted" id="udPwHint">(새 사용자: 필수 / 수정 시 비워두면 유지)</span></label><input id="udPw" type="password" placeholder="비밀번호"></div>
-        <div class="field"><label>부서</label><input id="udDept" type="text" placeholder="부서"></div>
-        <div class="field"><label>담당 파트</label>
-          <select id="udPart">
-            <option value="일렉기타">일렉기타</option>
-            <option value="베이스기타">베이스기타</option>
-            <option value="보컬">보컬</option>
-            <option value="피아노">피아노</option>
-            <option value="신디사이저">신디사이저</option>
-            <option value="직접입력">직접입력</option>
-          </select>
-        </div>
-        <div class="field" id="udPartCustomWrap" style="display:none"><label>담당 파트(직접입력)</label><input id="udPartCustom" type="text" placeholder="예: 색소폰"></div>
-      </div>
-      <div class="dlgFoot">
-        <button class="btn" id="cancelUserBtn" type="button">취소</button>
-        <button class="btn accent" id="saveUserBtn" type="submit">저장</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- PROFILE DIALOG -->
-  <dialog id="profileDlg">
-    <form id="profileForm" method="dialog">
-      <div class="dlgHead">
-        <div style="font-weight:800">내 정보</div>
-        <button id="closeProfileDlg" class="btn" type="button">닫기</button>
-      </div>
-      <div class="dlgBody">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div class="field"><label>이름</label><input id="pfName" type="text" placeholder="이름"></div>
-          <div class="field"><label>부서</label><input id="pfDept" type="text" placeholder="부서"></div>
-          <div class="field"><label>담당 파트</label>
-            <select id="pfPart">
-              <option value="일렉기타">일렉기타</option>
-              <option value="베이스기타">베이스기타</option>
-              <option value="보컬">보컬</option>
-              <option value="피아노">피아노</option>
-              <option value="신디사이저">신디사이저</option>
-              <option value="직접입력">직접입력</option>
-            </select>
-          </div>
-          <div class="field" id="pfPartCustomWrap" style="display:none"><label>담당 파트(직접입력)</label><input id="pfPartCustom" type="text" placeholder="예: 색소폰"></div>
-        </div>
-        <div class="card" style="margin-top:12px">
-          <div class="field"><label>현재 비밀번호 <span class="muted" id="pfPwHint">(비밀번호 변경 시에만 입력)</span></label><input id="pfCurPw" type="password" placeholder="현재 비밀번호"></div>
-          <div class="field"><label>새 비밀번호</label><input id="pfNewPw" type="password" placeholder="새 비밀번호"></div>
-          <div class="field"><label>새 비밀번호 확인</label><input id="pfNewPw2" type="password" placeholder="새 비밀번호 확인"></div>
-        </div>
-      </div>
-      <div class="dlgFoot">
-        <button class="btn" type="button" onclick="document.getElementById('profileDlg').close()">취소</button>
-        <button class="btn accent" id="profileSaveBtn" type="submit">저장</button>
-      </div>
-    </form>
-  </dialog>
-
-  <script src="./app.js" defer></script>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
