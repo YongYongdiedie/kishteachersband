@@ -3,80 +3,82 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KISH 교사 밴드부 플레이리스트</title>
+  <title>KISH 교사 밴드 포털 v3</title>
   <style>
     :root{
       --bg:#0b0c10;--card:#13151a;--muted:#8a8f98;--text:#e7ecf3;--accent:#58a6ff;--accent-2:#7ee787;--danger:#ff6b6b;--border:#242834;
-      --radius:16px
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Pretendard,Apple SD Gothic Neo,Noto Sans KR,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:var(--accent)}
     .container{max-width:1100px;margin:0 auto;padding:24px}
+
     header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
     h1{margin:0;font-size:clamp(22px,4vw,34px);font-weight:800;letter-spacing:-.3px}
-    .subbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0 16px}
-    .search{display:flex;gap:8px;align-items:center;background:var(--card);padding:10px 12px;border-radius:12px;border:1px solid var(--border);min-width:280px}
-    .search input{all:unset;width:220px}
-    .search select{background:transparent;border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:8px}
-    .pill{font-size:12px;color:var(--muted)}
 
-    .btn{border:1px solid var(--border);background:var(--card);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer;transition:.15s;display:inline-flex;gap:8px;align-items:center}
+    .btn{border:1px solid var(--border);background:#17202b;color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer;transition:.15s;display:inline-flex;gap:8px;align-items:center}
     .btn:hover{transform:translateY(-1px);border-color:#2f3442}
-    .btn.primary{background:linear-gradient(180deg,#1e2837,#1a2331);border-color:#2b3242}
     .btn.accent{background:var(--accent);border-color:transparent;color:#0b1220}
+    .btn.ghost{background:transparent}
+    .btn.danger{border-color:#4a1c1c;background:#2a1515;color:#ffb3b3}
 
-    .fab{position:fixed;right:24px;bottom:24px;padding:14px 16px;border-radius:14px;background:var(--accent);color:#0b1220;font-weight:700;box-shadow:0 10px 24px rgba(0,0,0,.35);border:none;cursor:pointer}
+    .tabs{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+    .tab{padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:#111722;cursor:pointer}
+    .tab.active{background:#17202b}
 
-    .list{display:grid;gap:10px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+
     .row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px}
     .rowHead{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
-    .titleLine{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .title{font-weight:700}
     .muted{color:var(--muted)}
-    .tag{font-size:12px;color:#0b1220;background:var(--accent-2);padding:2px 8px;border-radius:999px}
-    .rowBtns{display:flex;gap:6px}
-    .rowBtns .icon{background:transparent;border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:10px;cursor:pointer}
-
-    details{margin-top:10px}
-    details summary{cursor:pointer;color:var(--muted)}
-    table.parts{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:8px}
-    table.parts th, table.parts td{padding:10px 12px;text-align:left}
-    table.parts th{color:#c9d1d9;font-weight:700}
-    table.parts tr{background:#0f1117;border:1px solid var(--border)}
-    table.parts tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
-    table.parts tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
-
-    .empty{color:var(--muted);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:12px;background:rgba(255,255,255,0.02)}
 
     dialog{border:none;border-radius:16px;padding:0;max-width:980px;width:96vw;background:var(--card);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.5);}
     .dlgHead{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--border)}
     .dlgBody{padding:16px}
-    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-    .grid .field{display:flex;flex-direction:column;gap:6px}
-    label{font-size:12px;color:var(--muted)}
-    input[type="text"], input[type="url"]{border:1px solid var(--border);background:#0f1117;color:var(--text);padding:10px 12px;border-radius:10px}
-
-    .partsEditor{margin-top:12px}
-    .partsEditor table{width:100%;border-collapse:separate;border-spacing:0 8px}
-    .partsEditor th,.partsEditor td{padding:8px 10px;text-align:left}
-    .partsEditor th{color:#c9d1d9}
-    .partsEditor tr{background:#0f1117;border:1px solid var(--border)}
-    .partsEditor tr td:first-child{font-weight:700}
     .dlgFoot{display:flex;justify-content:flex-end;gap:8px;padding:16px;border-top:1px solid var(--border)}
 
+    /* Auth */
+    .authWrap{max-width:560px;margin:40px auto}
+    .tabsAuth{display:flex;gap:8px;margin-bottom:12px}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+    label{font-size:12px;color:var(--muted)}
+    input, select, textarea{border:1px solid var(--border);background:#0f1117;color:#e7ecf3;padding:10px 12px;border-radius:10px}
+    textarea{min-height:120px}
+
+    /* Search bar */
+    .subbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0 16px}
+    .search{display:flex;gap:8px;align-items:center;background:#111722;padding:10px 12px;border-radius:12px;border:1px solid var(--border);min-width:280px}
+    .search input{all:unset;width:220px}
+    .search select{background:transparent;border:1px solid var(--border);color:#e7ecf3;padding:6px 8px;border-radius:8px}
+    .pill{font-size:12px;color:var(--muted)}
+
+    /* Tables */
+    table.parts, table.board, table.logs{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:8px}
+    table.parts th, table.parts td, table.board th, table.board td, table.logs th, table.logs td{padding:10px 12px;text-align:left}
+    table.parts th, table.board th, table.logs th{color:#c9d1d9;font-weight:700}
+    table.parts tr, table.logs tr{background:#0f1117;border:1px solid var(--border)}
+    table.parts tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
+    table.parts tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
+
+    .headBtns{display:flex;gap:8px;align-items:center}
+    .empty{color:var(--muted);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:12px;background:rgba(255,255,255,0.02)}
+
+    /* Autocomplete */
     .autocomplete{position:relative}
     .ac-menu{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-top:6px;z-index:10;overflow:hidden}
     .ac-item{padding:10px 12px;cursor:pointer;border-top:1px solid var(--border)}
     .ac-item:first-child{border-top:none}
     .ac-item:hover{background:#1a1f2b}
 
-    .partsHeader{display:flex;justify-content:space-between;align-items:center;margin:12px 0 6px}
+    /* Comments */
+    .comment{border:1px solid var(--border);border-radius:10px;padding:10px;margin:8px 0;background:#0f1117}
+    .commentHead{display:flex;justify-content:space-between;align-items:center}
+
     .miniDel{margin-left:8px;border:1px solid var(--border);background:#141922;color:var(--muted);padding:2px 6px;border-radius:8px;cursor:pointer;font-size:12px}
     .miniDel:hover{color:#fff}
 
     @media (max-width:760px){
-      .grid{grid-template-columns:1fr}
       .rowHead{grid-template-columns:1fr}
     }
   </style>
@@ -84,34 +86,145 @@
 <body>
   <div class="container">
     <header>
-      <h1>🎵 KISH 교사 밴드부 플레이리스트</h1>
-      <button id="addBtn" class="btn accent" title="곡 추가">+ 곡 추가</button>
+      <h1>🎵 KISH 교사 밴드 포털 v3</h1>
+      <div class="headBtns" id="userBar" style="display:none"></div>
     </header>
 
-    <div class="subbar">
-      <div class="search" role="search">
-        <select id="searchField" aria-label="검색 필드">
-          <option value="title">제목</option>
-          <option value="artist">가수</option>
-        </select>
-        <div class="autocomplete" style="flex:1">
-          <input id="searchInput" type="text" placeholder="검색어 입력 (자동완성)" aria-label="검색" autocomplete="off" />
-          <div id="acMenu" class="ac-menu" style="display:none"></div>
-        </div>
-        <button id="clearSearch" class="btn" title="검색 지우기">지우기</button>
+    <!-- AUTH SCREEN -->
+    <section id="authScreen" class="authWrap">
+      <div class="tabsAuth">
+        <button class="tab active" id="tabLogin">로그인</button>
+        <button class="tab" id="tabSignup">회원가입</button>
       </div>
-      <span class="pill">정렬: 한글 자음 순 (제목)</span>
-      <button id="exportBtn" class="btn" title="JSON 내보내기">내보내기</button>
-      <label class="btn" for="importFile" title="JSON 가져오기">가져오기<input id="importFile" type="file" accept="application/json" style="display:none"/></label>
-    </div>
+      <div id="loginPane" class="card">
+        <div class="field"><label>이름</label><input id="loginName" type="text" placeholder="예: 김철수"></div>
+        <div class="field"><label>비밀번호</label><input id="loginPw" type="password" placeholder="비밀번호"></div>
+        <button class="btn accent" id="loginBtn">로그인</button>
+        <div class="muted" style="margin-top:10px">관리자: <b>admin</b> / 비밀번호 <b>1111</b></div>
+      </div>
+      <div id="signupPane" class="card" style="display:none">
+        <div class="field"><label>이름</label><input id="suName" type="text" placeholder="실명 입력"></div>
+        <div class="field"><label>비밀번호</label><input id="suPw" type="password" placeholder="비밀번호"></div>
+        <div class="field"><label>비밀번호 확인</label><input id="suPw2" type="password" placeholder="비밀번호 확인"></div>
+        <div class="field"><label>부서</label><input id="suDept" type="text" placeholder="예: 과학과"></div>
+        <div class="field"><label>담당 파트</label>
+          <select id="suPart">
+            <option value="일렉기타">일렉기타</option>
+            <option value="베이스기타">베이스기타</option>
+            <option value="보컬">보컬</option>
+            <option value="피아노">피아노</option>
+            <option value="신디사이저">신디사이저</option>
+            <option value="직접입력">직접입력</option>
+          </select>
+        </div>
+        <div class="field" id="suPartCustomWrap" style="display:none"><label>담당 파트(직접입력)</label><input id="suPartCustom" type="text" placeholder="예: 색소폰"></div>
+        <button class="btn accent" id="signupBtn">회원가입 요청</button>
+        <div class="muted" style="margin-top:10px">※ 관리자가 승인해야 로그인 가능합니다.</div>
+      </div>
+    </section>
 
-    <div id="list" class="list"></div>
-    <div id="empty" class="empty" style="display:none">아직 등록된 곡이 없습니다. 우측 하단 또는 상단의 <b>+ 곡 추가</b> 버튼을 눌러 시작하세요.</div>
+    <!-- APP SCREEN -->
+    <section id="appScreen" style="display:none">
+      <div class="tabs" id="mainTabs">
+        <button class="tab active" data-tab="playlist">플레이리스트</button>
+        <button class="tab" data-tab="board">자유게시판</button>
+        <button class="tab" data-tab="admin" id="adminTab" style="display:none">관리자</button>
+      </div>
+
+      <!-- PLAYLIST TAB -->
+      <section id="tab-playlist">
+        <div class="subbar">
+          <div class="search" role="search">
+            <select id="searchField" aria-label="검색 필드">
+              <option value="title">제목</option>
+              <option value="artist">가수</option>
+            </select>
+            <div class="autocomplete" style="flex:1">
+              <input id="searchInput" type="text" placeholder="검색어 입력 (자동완성)" aria-label="검색" autocomplete="off" />
+              <div id="acMenu" class="ac-menu" style="display:none"></div>
+            </div>
+            <button id="clearSearch" class="btn" title="검색 지우기">지우기</button>
+          </div>
+          <span class="pill">정렬: 한글 자음 순 (제목)</span>
+          <div class="headBtns">
+            <button id="byPersonBtn" class="btn" title="담당자별 곡 및 파트 확인">담당자별 곡 및 파트 확인</button>
+            <button id="addBtn" class="btn accent" title="곡 추가">+ 곡 추가</button>
+          </div>
+        </div>
+        <div id="list" class="list"></div>
+        <div id="empty" class="empty" style="display:none">아직 등록된 곡이 없습니다. <b>+ 곡 추가</b> 버튼을 눌러 시작하세요.</div>
+      </section>
+
+      <!-- BOARD TAB -->
+      <section id="tab-board" style="display:none">
+        <div class="rowHead" style="margin-bottom:10px">
+          <div style="font-weight:700">자유게시판</div>
+          <button class="btn accent" id="postNewBtn">+ 글쓰기</button>
+        </div>
+        <div class="muted" style="margin-bottom:10px">질문이나 건의사항 등 자유롭게 작성 가능합니다.</div>
+        <div class="card">
+          <table class="board" id="boardTable" style="border-spacing:0">
+            <thead>
+              <tr><th style="width:70px">순번</th><th>제목</th><th style="width:160px">작성자</th><th style="width:200px">작성일</th><th style="width:220px">관리</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div id="boardEmpty" class="empty" style="display:none">작성된 글이 없습니다.</div>
+        </div>
+      </section>
+
+      <!-- ADMIN TAB -->
+      <section id="tab-admin" style="display:none">
+        <div class="rowHead" style="margin-bottom:10px">
+          <div style="font-weight:700">가입 승인 대기 목록</div>
+        </div>
+        <div class="card">
+          <table class="board" id="signupTable" style="border-spacing:0">
+            <thead>
+              <tr><th>이름</th><th>부서</th><th>담당 파트</th><th>신청일</th><th style="width:220px">승인/거절</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div id="signupEmpty" class="empty" style="display:none">대기 중인 신청이 없습니다.</div>
+        </div>
+
+        <div style="height:16px"></div>
+        <div class="rowHead" style="margin-bottom:10px">
+          <div style="font-weight:700">사용자 관리</div>
+          <button class="btn" id="userAddBtn">+ 사용자 추가</button>
+        </div>
+        <div class="card">
+          <table class="board" id="usersTable" style="border-spacing:0">
+            <thead>
+              <tr><th>이름</th><th>부서</th><th>담당 파트</th><th>가입일</th><th style="width:320px">관리</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div id="usersEmpty" class="empty" style="display:none">등록된 사용자가 없습니다.</div>
+        </div>
+
+        <div style="height:16px"></div>
+        <div class="rowHead" style="margin-bottom:10px">
+          <div style="font-weight:700">관리자 로그</div>
+          <div class="headBtns">
+            <button id="logsExportBtn" class="btn">내보내기</button>
+            <button id="logsClearBtn" class="btn danger">모두 비우기</button>
+          </div>
+        </div>
+        <div class="card">
+          <table class="logs" id="logsTable">
+            <thead>
+              <tr><th style="width:180px">시간</th><th style="width:120px">관리자</th><th style="width:160px">동작</th><th>상세</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div id="logsEmpty" class="empty" style="display:none">로그가 없습니다.</div>
+        </div>
+      </section>
+    </section>
   </div>
 
-  <button id="fab" class="fab">+ 곡 추가</button>
-
-  <!-- Add/Edit Dialog -->
+  <!-- SONG DIALOG (Add/Edit) -->
   <dialog id="songDlg">
     <form id="songForm" method="dialog">
       <div class="dlgHead">
@@ -119,18 +232,18 @@
         <button id="closeDlg" class="btn" value="cancel" type="button">닫기</button>
       </div>
       <div class="dlgBody">
-        <div class="grid">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
           <div class="field"><label for="title">제목*</label><input id="title" name="title" type="text" required /></div>
           <div class="field"><label for="artist">가수*</label><input id="artist" name="artist" type="text" required /></div>
           <div class="field"><label for="version">버전</label><input id="version" name="version" type="text" placeholder="예: 원곡/어쿠/락ver." /></div>
         </div>
 
-        <div class="partsEditor">
-          <div class="partsHeader">
+        <div class="partsEditor" style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 6px">
             <label style="display:block;color:#c9d1d9;font-weight:700">파트별 담당자/링크/공유</label>
             <button id="addPartBtn" type="button" class="btn" title="파트 추가">+ 파트 추가</button>
           </div>
-          <table>
+          <table class="parts">
             <thead>
               <tr>
                 <th style="width:180px">파트</th>
@@ -145,13 +258,225 @@
       </div>
       <div class="dlgFoot">
         <button class="btn" value="cancel" type="button" id="cancelBtn">취소</button>
-        <button class="btn primary" id="saveBtn" type="submit">완료</button>
+        <button class="btn accent" id="saveBtn" type="submit">완료</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- BY PERSON DIALOG -->
+  <dialog id="personDlg">
+    <div class="dlgHead">
+      <div style="font-weight:800">담당자별 곡 및 파트 확인</div>
+      <button id="closePersonDlg" class="btn" type="button">닫기</button>
+    </div>
+    <div class="dlgBody">
+      <div class="search" role="search">
+        <div class="autocomplete" style="flex:1">
+          <input id="personInput" type="text" placeholder="이름 입력 (자동완성)" autocomplete="off" />
+          <div id="personAcMenu" class="ac-menu" style="display:none"></div>
+        </div>
+        <button id="personClear" class="btn" title="검색 지우기">지우기</button>
+      </div>
+      <div style="margin-top:12px">
+        <table class="parts" id="personTable">
+          <thead>
+            <tr><th>곡</th><th>가수</th><th>버전</th><th>담당 파트</th><th>예시 링크</th><th>공유 링크</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="personEmpty" class="empty" style="display:none">담당된 곡이 없습니다.</div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- BOARD DIALOGS -->
+  <dialog id="postDlg">
+    <form id="postForm" method="dialog">
+      <div class="dlgHead">
+        <div style="font-weight:800" id="postDlgTitle">글쓰기</div>
+        <button id="closePostDlg" class="btn" value="cancel" type="button">닫기</button>
+      </div>
+      <div class="dlgBody">
+        <div class="field"><label>제목</label><input id="postTitle" type="text" placeholder="제목 입력"></div>
+        <div class="field"><label>내용</label><textarea id="postBody" placeholder="내용 입력"></textarea></div>
+      </div>
+      <div class="dlgFoot">
+        <button class="btn" value="cancel" type="button" id="cancelPostBtn">취소</button>
+        <button class="btn accent" id="savePostBtn" type="submit">완료</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="postViewDlg">
+    <div class="dlgHead">
+      <div style="font-weight:800" id="postViewTitle">글 제목</div>
+      <button id="closePostViewDlg" class="btn" type="button">닫기</button>
+    </div>
+    <div class="dlgBody">
+      <div class="muted" id="postMeta">작성자 · 날짜</div>
+      <div id="postViewBody" class="card" style="white-space:pre-wrap;margin-top:8px"></div>
+      <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:700">댓글</div>
+        <div id="postViewActions"></div>
+      </div>
+      <div id="commentsWrap"></div>
+      <div id="commentEditor" class="card" style="margin-top:8px">
+        <div class="field"><label>댓글 내용</label><textarea id="commentBody" placeholder="댓글을 입력하세요"></textarea></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button class="btn" id="cancelCommentBtn" type="button">지우기</button>
+          <button class="btn accent" id="addCommentBtn" type="button">댓글 등록</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- USER DIALOG (Admin add/edit) -->
+  <dialog id="userDlg">
+    <form id="userForm" method="dialog">
+      <div class="dlgHead">
+        <div style="font-weight:800" id="userDlgTitle">사용자 추가</div>
+        <button id="closeUserDlg" class="btn" type="button">닫기</button>
+      </div>
+      <div class="dlgBody">
+        <div class="field"><label>이름</label><input id="udName" type="text" placeholder="이름"></div>
+        <div class="field"><label>비밀번호 <span class="muted" id="udPwHint">(새 사용자: 필수 / 수정 시 비워두면 유지)</span></label><input id="udPw" type="password" placeholder="비밀번호"></div>
+        <div class="field"><label>부서</label><input id="udDept" type="text" placeholder="부서"></div>
+        <div class="field"><label>담당 파트</label>
+          <select id="udPart">
+            <option value="일렉기타">일렉기타</option>
+            <option value="베이스기타">베이스기타</option>
+            <option value="보컬">보컬</option>
+            <option value="피아노">피아노</option>
+            <option value="신디사이저">신디사이저</option>
+            <option value="직접입력">직접입력</option>
+          </select>
+        </div>
+        <div class="field" id="udPartCustomWrap" style="display:none"><label>담당 파트(직접입력)</label><input id="udPartCustom" type="text" placeholder="예: 색소폰"></div>
+      </div>
+      <div class="dlgFoot">
+        <button class="btn" id="cancelUserBtn" type="button">취소</button>
+        <button class="btn accent" id="saveUserBtn" type="submit">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- PROFILE DIALOG -->
+  <dialog id="profileDlg">
+    <form id="profileForm" method="dialog">
+      <div class="dlgHead">
+        <div style="font-weight:800">내 정보</div>
+        <button id="closeProfileDlg" class="btn" type="button">닫기</button>
+      </div>
+      <div class="dlgBody">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="field"><label>이름</label><input id="pfName" type="text" placeholder="이름"></div>
+          <div class="field"><label>부서</label><input id="pfDept" type="text" placeholder="부서"></div>
+          <div class="field"><label>담당 파트</label>
+            <select id="pfPart">
+              <option value="일렉기타">일렉기타</option>
+              <option value="베이스기타">베이스기타</option>
+              <option value="보컬">보컬</option>
+              <option value="피아노">피아노</option>
+              <option value="신디사이저">신디사이저</option>
+              <option value="직접입력">직접입력</option>
+            </select>
+          </div>
+          <div class="field" id="pfPartCustomWrap" style="display:none"><label>담당 파트(직접입력)</label><input id="pfPartCustom" type="text" placeholder="예: 색소폰"></div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="field"><label>현재 비밀번호 <span class="muted" id="pfPwHint">(비밀번호 변경 시에만 입력)</span></label><input id="pfCurPw" type="password" placeholder="현재 비밀번호"></div>
+          <div class="field"><label>새 비밀번호</label><input id="pfNewPw" type="password" placeholder="새 비밀번호"></div>
+          <div class="field"><label>새 비밀번호 확인</label><input id="pfNewPw2" type="password" placeholder="새 비밀번호 확인"></div>
+        </div>
+      </div>
+      <div class="dlgFoot">
+        <button class="btn" type="button" onclick="document.getElementById('profileDlg').close()">취소</button>
+        <button class="btn accent" id="profileSaveBtn" type="submit">저장</button>
       </div>
     </form>
   </dialog>
 
   <script>
-    // ==== Data & Utils ====
+    // ====== Storage Keys ======
+    const LS_SONGS = 'kish_band_playlist_v1';
+    const LS_USERS = 'kish_users_v1';
+    const LS_SIGNUPS = 'kish_signups_v1';
+    const LS_POSTS = 'kish_board_posts_v1';
+    const LS_SESSION = 'kish_session_v1';
+    const LS_LOGS = 'kish_admin_logs_v1';
+
+    const collator = new Intl.Collator('ko', { sensitivity: 'base', numeric: true });
+
+    // ====== Utils ======
+    const uid = ()=>'id-'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+    const fmtDate = (d)=>{
+      const pad = n=> String(n).padStart(2,'0');
+      const dt = new Date(d);
+      return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+    };
+    const hashHex = async (text)=>{
+      const buf = new TextEncoder().encode(text);
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    };
+
+    const read = (k, def)=>{ try{ return JSON.parse(localStorage.getItem(k)) ?? def; }catch(e){ return def; } };
+    const write = (k,v)=> localStorage.setItem(k, JSON.stringify(v));
+
+    // ====== Auth State ======
+    let session = read(LS_SESSION, null); // {name}
+
+    // ====== Users & Signups ======
+    let users = read(LS_USERS, []);      // [{id,name,hash,dept,part,partCustom,createdAt}]
+    let signups = read(LS_SIGNUPS, []);  // same shape but pending list
+    let logs = read(LS_LOGS, []);        // [{id,ts,actor,action,meta}]
+
+    function addLog(action, meta={}){
+      logs.unshift({ id: uid(), ts: Date.now(), actor: session?.name || 'system', action, meta });
+      if(logs.length>500) logs = logs.slice(0,500);
+      write(LS_LOGS, logs);
+      // refresh if admin tab visible
+      if(document.getElementById('tab-admin').style.display!=='none' && document.querySelector('#tab-admin').style.display!=='none'){
+        renderLogs();
+      }
+    }
+
+    // ensure admin exists (no signup needed)
+    (function ensureAdmin(){
+      if(!users.some(u=>u.name==='admin')){
+        users.push({ id: uid(), name:'admin', hash:'admin:1111', dept:'관리자', part:'관리자', partCustom:'', createdAt: Date.now() });
+        write(LS_USERS, users);
+        addLog('bootstrap_admin', {name:'admin'});
+      }
+    })();
+
+    // ====== DOM Refs ======
+    const authScreen = document.getElementById('authScreen');
+    const appScreen = document.getElementById('appScreen');
+    const userBar = document.getElementById('userBar');
+
+    const tabLogin = document.getElementById('tabLogin');
+    const tabSignup = document.getElementById('tabSignup');
+    const loginPane = document.getElementById('loginPane');
+    const signupPane = document.getElementById('signupPane');
+
+    const loginName = document.getElementById('loginName');
+    const loginPw = document.getElementById('loginPw');
+    const loginBtn = document.getElementById('loginBtn');
+
+    const suName = document.getElementById('suName');
+    const suPw = document.getElementById('suPw');
+    const suPw2 = document.getElementById('suPw2');
+    const suDept = document.getElementById('suDept');
+    const suPart = document.getElementById('suPart');
+    const suPartCustomWrap = document.getElementById('suPartCustomWrap');
+    const suPartCustom = document.getElementById('suPartCustom');
+    const signupBtn = document.getElementById('signupBtn');
+
+    const mainTabs = document.getElementById('mainTabs');
+    const adminTab = document.getElementById('adminTab');
+
+    // ====== SONGS (Playlist) ======
     const DEFAULT_PARTS = [
       { key:'1stKeys',  label:'1st 건반', builtin:true },
       { key:'2ndKeys',  label:'2nd 건반', builtin:true },
@@ -164,84 +489,27 @@
       { key:'Vocal2',   label:'보컬 2', builtin:true },
       { key:'Vocal3',   label:'보컬 3', builtin:true },
     ];
-
-    const collator = new Intl.Collator('ko', { sensitivity: 'base', numeric: true });
-    const LS_KEY = 'kish_band_playlist_v1';
-
-    // ---- Helpers for dynamic parts ----
-    const slugify = (s)=> s.toString().trim()
-      .replace(/\s+/g,'-')
-      .replace(/[^\w\-가-힣]/g,'')
-      .replace(/\-+/g,'-')
-      .toLowerCase() || ('p-'+Math.random().toString(36).slice(2,7));
-
-    const uniqueKey = (base, used)=>{
-      let k = base; let i=2;
-      while(used.has(k)) { k = base+"-"+i++; }
-      return k;
-    };
-
+    const slugify = (s)=> s.toString().trim().replace(/\s+/g,'-').replace(/[^\w\-가-힣]/g,'').replace(/\-+/g,'-').toLowerCase() || ('p-'+Math.random().toString(36).slice(2,7));
+    const uniqueKey = (base, used)=>{ let k = base; let i=2; while(used.has(k)) k = base+"-"+(i++); return k; };
     const cloneDefaults = ()=> DEFAULT_PARTS.map(p=> ({ key:p.key, label:p.label, player:'', ref:'', misc:'', builtin:true }));
-
     function normalizeSong(s){
       if(Array.isArray(s.parts)){
-        // ensure shape
-        s.parts = s.parts.map(p=> ({
-          key: p.key || slugify(p.label||'part'),
-          label: p.label || p.key || '파트',
-          player: p.player || '',
-          ref: p.ref || '',
-          misc: p.misc || '',
-          builtin: !!p.builtin && DEFAULT_PARTS.some(d=>d.key===p.key)
-        }));
+        s.parts = s.parts.map(p=> ({ key: p.key || slugify(p.label||'part'), label: p.label || p.key || '파트', player: p.player || '', ref: p.ref || '', misc: p.misc || '', builtin: !!p.builtin && DEFAULT_PARTS.some(d=>d.key===p.key) }));
         return s;
       }
-      // legacy object -> array
-      const arr = [];
-      const obj = s.parts || {};
-      const used = new Set();
-      DEFAULT_PARTS.forEach(d=>{
-        const pr = obj[d.key] || {player:'',ref:'',misc:''};
-        arr.push({ key:d.key, label:d.label, player:pr.player||'', ref:pr.ref||'', misc:pr.misc||'', builtin:true });
-        used.add(d.key);
-      });
-      // include any extra custom keys
-      Object.keys(obj).forEach(k=>{
-        if(!used.has(k)){
-          const pr = obj[k] || {player:'',ref:'',misc:''};
-          arr.push({ key:k, label:k, player:pr.player||'', ref:pr.ref||'', misc:pr.misc||'', builtin:false });
-        }
-      });
-      s.parts = arr;
-      return s;
+      const arr = []; const obj = s.parts || {}; const used = new Set();
+      DEFAULT_PARTS.forEach(d=>{ const pr = obj[d.key] || {player:'',ref:'',misc:''}; arr.push({ key:d.key, label:d.label, player:pr.player||'', ref:pr.ref||'', misc:pr.misc||'', builtin:true }); used.add(d.key); });
+      Object.keys(obj).forEach(k=>{ if(!used.has(k)){ const pr = obj[k] || {player:'',ref:'',misc:''}; arr.push({ key:k, label:k, player:pr.player||'', ref:pr.ref||'', misc:pr.misc||'', builtin:false }); } });
+      s.parts = arr; return s;
     }
 
-    function normalizeAllSongs(list){
-      return (list||[]).map(normalizeSong);
-    }
+    let songs = (read(LS_SONGS, []).map(normalizeSong));
+    const saveSongs = ()=> write(LS_SONGS, songs);
 
-    const uid = () => 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-
-    function defaultSong(){
-      return { id: uid(), title:'', artist:'', version:'', parts: cloneDefaults() };
-    }
-
-    function loadSongs(){
-      try{ return JSON.parse(localStorage.getItem(LS_KEY)) || []; }catch(e){ return []; }
-    }
-    function saveSongs(arr){ localStorage.setItem(LS_KEY, JSON.stringify(arr)); }
-
-    // ==== State ====
-    let songs = normalizeAllSongs(loadSongs());
-    saveSongs(songs); // migrate if needed
-    let editingId = null; // null: add, otherwise edit
-    let editingParts = []; // array of {key,label,player,ref,misc,builtin}
-
-    // ==== DOM ====
+    // Playlist DOM
     const listEl = document.getElementById('list');
     const emptyEl = document.getElementById('empty');
     const addBtn = document.getElementById('addBtn');
-    const fab = document.getElementById('fab');
 
     const songDlg = document.getElementById('songDlg');
     const songForm = document.getElementById('songForm');
@@ -258,273 +526,653 @@
     const searchInput = document.getElementById('searchInput');
     const acMenu = document.getElementById('acMenu');
     const clearSearch = document.getElementById('clearSearch');
-    const exportBtn = document.getElementById('exportBtn');
-    const importFile = document.getElementById('importFile');
 
-    // ==== Parts Editor ====
-    function buildPartsEditor(){
-      partsTbody.innerHTML = '';
-      editingParts.forEach(p=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>
-            <span class="part-label">${p.label}</span>
-            ${p.builtin ? '' : `<button type="button" class="miniDel" data-key="${p.key}">삭제</button>`}
-          </td>
-          <td><input type="text" data-key="${p.key}" data-field="player" placeholder="담당자 이름" value="${p.player || ''}"></td>
-          <td><input type="url" data-key="${p.key}" data-field="ref" placeholder="예시 링크 (https://)" value="${p.ref || ''}"></td>
-          <td><input type="url" data-key="${p.key}" data-field="misc" placeholder="기타/공유 링크 (https://)" value="${p.misc || ''}"></td>
-        `;
-        partsTbody.appendChild(tr);
+    // By person dialog DOM
+    const byPersonBtn = document.getElementById('byPersonBtn');
+    const personDlg = document.getElementById('personDlg');
+    const closePersonDlg = document.getElementById('closePersonDlg');
+    const personInput = document.getElementById('personInput');
+    const personAcMenu = document.getElementById('personAcMenu');
+    const personClear = document.getElementById('personClear');
+    const personTableBody = document.querySelector('#personTable tbody');
+    const personEmpty = document.getElementById('personEmpty');
+    const personColumns = ['title','artist','version','part','ref','misc'];
+    let personSort = { key: 'title', dir: 'asc' };
+    const personThead = document.querySelector('#personTable thead');
+
+    function updatePersonHeader(){
+      const labels = ['곡','가수','버전','담당 파트','예시 링크','공유 링크'];
+      const ths = personThead.querySelectorAll('th');
+      ths.forEach((th,i)=>{
+        const k = personColumns[i];
+        let label = labels[i];
+        if(k===personSort.key){ label += personSort.dir==='asc' ? ' ▲' : ' ▼'; }
+        th.textContent = label;
       });
     }
-
-    function addCustomPart(){
-      const name = prompt('추가할 파트 이름을 입력하세요');
-      if(!name) return;
-      const base = slugify(name);
-      const used = new Set(editingParts.map(p=>p.key));
-      const key = uniqueKey(base, used);
-      editingParts.push({ key, label:name.trim(), player:'', ref:'', misc:'', builtin:false });
-      buildPartsEditor();
-    }
-
-    addPartBtn.addEventListener('click', addCustomPart);
-
-    partsTbody.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.miniDel');
-      if(!btn) return;
-      const key = btn.dataset.key;
-      const idx = editingParts.findIndex(p=>p.key===key);
-      if(idx>-1){
-        if(editingParts[idx].builtin){ alert('기본 파트는 삭제할 수 없습니다.'); return; }
-        editingParts.splice(idx,1);
-        buildPartsEditor();
-      }
+    personThead.addEventListener('click', (e)=>{
+      const th = e.target.closest('th');
+      if(!th) return;
+      const idx = Array.from(personThead.querySelector('tr').children).indexOf(th);
+      const key = personColumns[idx];
+      if(!key) return;
+      if(personSort.key===key){ personSort.dir = personSort.dir==='asc' ? 'desc' : 'asc'; }
+      else { personSort.key = key; personSort.dir = 'asc'; }
+      updatePersonHeader();
+      renderPersonResults(personInput.value.trim());
     });
 
-    // ==== Render ====
-    function render(){
-      const q = searchInput.value.trim();
-      const field = searchField.value; // 'title' or 'artist'
+    // auth bar render
+    function renderUserBar(){
+      if(!session){ userBar.style.display='none'; return; }
+      userBar.style.display='flex';
+      userBar.innerHTML = '';
+      const span = document.createElement('div');
+      span.className='muted';
+      span.textContent = `${session.name}님`;
+      const profile = document.createElement('button');
+      profile.className='btn';
+      profile.textContent='내 정보';
+      profile.addEventListener('click', openProfile);
+      const logout = document.createElement('button');
+      logout.className='btn ghost';
+      logout.textContent = '로그아웃';
+      logout.addEventListener('click', ()=>{ session=null; localStorage.removeItem(LS_SESSION); location.reload(); });
+      userBar.appendChild(span); userBar.appendChild(profile); userBar.appendChild(logout);
+    }
+      userBar.style.display='flex';
+      userBar.innerHTML = '';
+      const span = document.createElement('div');
+      span.className='muted';
+      span.textContent = `${session.name}님`; 
+      const logout = document.createElement('button');
+      logout.className='btn ghost';
+      logout.textContent = '로그아웃';
+      logout.addEventListener('click', ()=>{ session=null; localStorage.removeItem(LS_SESSION); location.reload(); });
+      userBar.appendChild(span); userBar.appendChild(logout);
+    }
 
+    // ====== Playlist Rendering ======
+    function renderSongs(){
+      // filter & sort
+      const q = searchInput.value.trim().toLowerCase();
+      const field = searchField.value;
       const filtered = songs
         .slice()
         .sort((a,b)=> collator.compare(a.title||'', b.title||''))
-        .filter(s=> {
-          if(!q) return true;
-          const t = (s[field]||'').toLowerCase();
-          return t.includes(q.toLowerCase());
-        });
+        .filter(s=> { if(!q) return true; const t=(s[field]||'').toLowerCase(); return t.includes(q); });
 
-      listEl.innerHTML = '';
-      if(filtered.length === 0){ emptyEl.style.display = 'block'; return; }
-      emptyEl.style.display = 'none';
+      listEl.innerHTML='';
+      if(filtered.length===0){ emptyEl.style.display='block'; return; }
+      emptyEl.style.display='none';
 
       filtered.forEach((s, idx)=>{
-        const row = document.createElement('div');
-        row.className = 'row';
+        const row = document.createElement('div'); row.className='row';
+        const head = document.createElement('div'); head.className='rowHead';
 
-        const head = document.createElement('div');
-        head.className = 'rowHead';
-
-        const titleLine = document.createElement('div');
-        titleLine.className = 'titleLine';
-        const title = document.createElement('div');
-        title.className = 'title';
-        title.textContent = `${idx+1}. ${s.title}`;
-        const meta = document.createElement('div');
-        meta.className = 'muted';
-        meta.textContent = ` · ${s.artist}${s.version? ' · '+s.version : ''}`;
-        titleLine.appendChild(title);
-        titleLine.appendChild(meta);
-
-        const btns = document.createElement('div');
-        btns.className = 'rowBtns';
-        const editBtn = document.createElement('button');
-        editBtn.className = 'icon';
-        editBtn.textContent = '편집';
-        editBtn.addEventListener('click', ()=> openEdit(s.id));
-        const delBtn = document.createElement('button');
-        delBtn.className = 'icon';
-        delBtn.style.color = 'var(--danger)';
-        delBtn.textContent = '삭제';
-        delBtn.addEventListener('click', ()=> doDelete(s.id));
-        btns.appendChild(editBtn);
-        btns.appendChild(delBtn);
-
-        head.appendChild(titleLine);
-        head.appendChild(btns);
+        const tl = document.createElement('div');
+        tl.innerHTML = `<b>${idx+1}. ${s.title}</b> <span class="muted"> · ${s.artist}${s.version? ' · '+s.version:''}</span>`;
+        const btns = document.createElement('div'); btns.style.display='flex'; btns.style.gap='6px';
+        const editBtn = document.createElement('button'); editBtn.className='btn'; editBtn.textContent='편집'; editBtn.addEventListener('click', ()=> openEditSong(s.id));
+        const delBtn = document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='삭제'; delBtn.addEventListener('click', ()=> deleteSong(s.id));
+        btns.appendChild(editBtn); btns.appendChild(delBtn);
+        head.appendChild(tl); head.appendChild(btns);
 
         const det = document.createElement('details');
-        const sum = document.createElement('summary');
-        sum.textContent = '자세히 보기';
-        det.appendChild(sum);
-
-        // parts table
-        const tbl = document.createElement('table');
-        tbl.className = 'parts';
-        const thead = document.createElement('thead');
-        thead.innerHTML = `<tr><th>파트</th><th>담당자</th><th>예시 링크</th><th>기타/공유</th></tr>`;
-        const tbody = document.createElement('tbody');
+        const sum = document.createElement('summary'); sum.textContent = '자세히 보기'; det.appendChild(sum);
+        const tbl = document.createElement('table'); tbl.className='parts';
+        tbl.innerHTML = `<thead><tr><th>파트</th><th>담당자</th><th>예시 링크</th><th>기타/공유</th></tr></thead>`;
+        const tb = document.createElement('tbody');
         (s.parts||[]).forEach(p=>{
           const linkA = p.ref ? `<a href="${p.ref}" target="_blank" rel="noopener">열기</a>` : '<span class="muted">-</span>';
           const linkB = p.misc ? `<a href="${p.misc}" target="_blank" rel="noopener">열기</a>` : '<span class="muted">-</span>';
           const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${p.label}</td>
-            <td>${p.player || '<span class=\"muted\">(미정)</span>'}</td>
-            <td>${linkA}</td>
-            <td>${linkB}</td>
-          `;
-          tbody.appendChild(tr);
+          tr.innerHTML = `<td>${p.label}</td><td>${p.player||'<span class=\"muted\">(미정)</span>'}</td><td>${linkA}</td><td>${linkB}</td>`;
+          tb.appendChild(tr);
         });
-        tbl.appendChild(thead);
-        tbl.appendChild(tbody);
-        det.appendChild(tbl);
+        tbl.appendChild(tb); det.appendChild(tbl);
 
-        row.appendChild(head);
-        row.appendChild(det);
+        row.appendChild(head); row.appendChild(det);
         listEl.appendChild(row);
       });
     }
 
-    // ==== Open/Save/Delete ====
-    function openAdd(){
-      editingId = null;
-      const s = defaultSong();
-      titleInput.value = '';
-      artistInput.value = '';
-      versionInput.value = '';
-      editingParts = s.parts.map(p=>({...p}));
-      buildPartsEditor();
-      songDlg.showModal();
-      setTimeout(()=> titleInput.focus(), 50);
-    }
-
-    function openEdit(id){
-      const s = songs.find(x=>x.id===id);
-      if(!s) return;
-      editingId = id;
-      const sn = normalizeSong({...s});
-      titleInput.value = sn.title || '';
-      artistInput.value = sn.artist || '';
-      versionInput.value = sn.version || '';
-      editingParts = (sn.parts||[]).map(p=>({...p}));
-      buildPartsEditor();
-      songDlg.showModal();
-      setTimeout(()=> titleInput.focus(), 50);
-    }
-
-    function gatherParts(){
-      const map = new Map(editingParts.map(p=> [p.key, p] ));
-      partsTbody.querySelectorAll('input').forEach(inp=>{
-        const key = inp.dataset.key;
-        const field = inp.dataset.field; // player | ref | misc
-        if(key && field && map.has(key)){
-          map.get(key)[field] = inp.value.trim();
-        }
+    // ====== Song Editor ======
+    let editingSongId = null;
+    let editingParts = [];
+    function buildPartsEditor(){
+      partsTbody.innerHTML='';
+      editingParts.forEach(p=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span>${p.label}</span>${p.builtin? '': `<button type="button" class="miniDel" data-key="${p.key}">삭제</button>`}</td>
+          <td><input type="text" data-key="${p.key}" data-field="player" placeholder="담당자 이름" value="${p.player||''}"></td>
+          <td><input type="url" data-key="${p.key}" data-field="ref" placeholder="예시 링크 (https://)" value="${p.ref||''}"></td>
+          <td><input type="url" data-key="${p.key}" data-field="misc" placeholder="기타/공유 링크 (https://)" value="${p.misc||''}"></td>`;
+        partsTbody.appendChild(tr);
       });
+    }
+
+    function openAddSong(){
+      editingSongId = null;
+      titleInput.value=''; artistInput.value=''; versionInput.value='';
+      editingParts = cloneDefaults();
+      buildPartsEditor();
+      songDlg.showModal(); setTimeout(()=> titleInput.focus(), 50);
+    }
+    function openEditSong(id){
+      const s = songs.find(x=>x.id===id); if(!s) return;
+      editingSongId = id;
+      titleInput.value = s.title||''; artistInput.value=s.artist||''; versionInput.value=s.version||'';
+      editingParts = (s.parts||[]).map(p=>({...p}));
+      buildPartsEditor(); songDlg.showModal(); setTimeout(()=> titleInput.focus(), 50);
+    }
+    function gatherParts(){
+      const map = new Map(editingParts.map(p=>[p.key,p]));
+      partsTbody.querySelectorAll('input').forEach(inp=>{ const k=inp.dataset.key; const f=inp.dataset.field; if(k&&f&&map.has(k)){ map.get(k)[f] = inp.value.trim(); }});
       return Array.from(map.values());
     }
 
-    function doDelete(id){
+    function deleteSong(id){
+      const s = songs.find(x=>x.id===id); if(!s) return;
       if(!confirm('이 곡을 삭제할까요?')) return;
-      songs = songs.filter(s=> s.id!==id);
-      saveSongs(songs);
-      render();
+      songs = songs.filter(x=>x.id!==id); saveSongs(); renderSongs();
+      addLog('song_deleted', {title:s.title, artist:s.artist});
     }
+
+    addPartBtn.addEventListener('click', ()=>{
+      const name = prompt('추가할 파트 이름을 입력하세요'); if(!name) return;
+      const base = slugify(name); const used = new Set(editingParts.map(p=>p.key)); const key = uniqueKey(base, used);
+      editingParts.push({ key, label:name.trim(), player:'', ref:'', misc:'', builtin:false }); buildPartsEditor();
+    });
+    partsTbody.addEventListener('click', (e)=>{ const btn=e.target.closest('.miniDel'); if(!btn) return; const key=btn.dataset.key; const idx=editingParts.findIndex(p=>p.key===key); if(idx>-1){ if(editingParts[idx].builtin){ alert('기본 파트는 삭제할 수 없습니다.'); return;} editingParts.splice(idx,1); buildPartsEditor(); }});
 
     songForm.addEventListener('submit', (e)=>{
       e.preventDefault();
-      const title = titleInput.value.trim();
-      const artist = artistInput.value.trim();
-      const version = versionInput.value.trim();
-      if(!title || !artist){
-        alert('제목과 가수를 입력해주세요.');
-        return;
-      }
+      const title = titleInput.value.trim(); const artist = artistInput.value.trim(); const version = versionInput.value.trim(); if(!title||!artist){ alert('제목과 가수를 입력해주세요.'); return; }
       const parts = gatherParts();
-
-      if(editingId){
-        songs = songs.map(s=> s.id===editingId ? { ...s, title, artist, version, parts } : s);
-      }else{
-        songs.push({ id: uid(), title, artist, version, parts });
-      }
-      saveSongs(songs);
-      songDlg.close();
-      render();
+      if(editingSongId){ songs = songs.map(s=> s.id===editingSongId ? { ...s, title, artist, version, parts } : s); addLog('song_edited', {title, artist}); }
+      else { songs.push({ id: uid(), title, artist, version, parts }); addLog('song_added', {title, artist}); }
+      saveSongs(); songDlg.close(); renderSongs();
     });
-
     [closeDlg, cancelBtn].forEach(b=> b.addEventListener('click', ()=> songDlg.close()));
-    addBtn.addEventListener('click', openAdd);
-    fab.addEventListener('click', openAdd);
+    addBtn.addEventListener('click', openAddSong);
 
-    // ==== Search & Autocomplete ====
-    let acTimer = null;
+    // ====== Search & Autocomplete (Songs) ======
+    let acTimer=null;
     function updateAutocomplete(){
-      const q = searchInput.value.trim().toLowerCase();
-      const field = searchField.value;
-      if(!q){ acMenu.style.display='none'; acMenu.innerHTML=''; render(); return; }
-      const candidates = songs
-        .map(s=> s[field] || '')
-        .filter(Boolean)
-        .filter((v,i,arr)=> arr.indexOf(v)===i) // unique
-        .filter(v=> v.toLowerCase().includes(q))
-        .sort((a,b)=> collator.compare(a,b))
-        .slice(0,8);
-      if(candidates.length===0){ acMenu.style.display='none'; acMenu.innerHTML=''; render(); return; }
+      const q = searchInput.value.trim().toLowerCase(); const field = searchField.value; if(!q){ acMenu.style.display='none'; acMenu.innerHTML=''; renderSongs(); return; }
+      const candidates = songs.map(s=> s[field]||'').filter(Boolean).filter((v,i,arr)=> arr.indexOf(v)===i).filter(v=> v.toLowerCase().includes(q)).sort((a,b)=> collator.compare(a,b)).slice(0,8);
+      if(candidates.length===0){ acMenu.style.display='none'; acMenu.innerHTML=''; renderSongs(); return; }
       acMenu.innerHTML = candidates.map(v=> `<div class="ac-item" data-value="${v.replaceAll('"','&quot;')}">${v}</div>`).join('');
       acMenu.style.display='block';
     }
+    searchInput.addEventListener('input', ()=>{ clearTimeout(acTimer); acTimer=setTimeout(()=>{ updateAutocomplete(); renderSongs(); }, 200); });
+    searchField.addEventListener('change', ()=>{ updateAutocomplete(); renderSongs(); });
+    acMenu.addEventListener('click', (e)=>{ const item=e.target.closest('.ac-item'); if(!item) return; searchInput.value=item.dataset.value||''; acMenu.style.display='none'; renderSongs(); });
+    document.addEventListener('click', (e)=>{ if(!acMenu.contains(e.target) && e.target!==searchInput){ acMenu.style.display='none'; }});
+    clearSearch.addEventListener('click', ()=>{ searchInput.value=''; acMenu.style.display='none'; renderSongs(); });
 
-    searchInput.addEventListener('input', ()=>{
-      clearTimeout(acTimer);
-      acTimer = setTimeout(()=>{ updateAutocomplete(); render(); }, 200);
-    });
-    searchField.addEventListener('change', ()=>{ updateAutocomplete(); render(); });
-    acMenu.addEventListener('click', (e)=>{
-      const item = e.target.closest('.ac-item');
-      if(!item) return;
-      searchInput.value = item.dataset.value || '';
-      acMenu.style.display='none';
-      render();
-    });
-    document.addEventListener('click', (e)=>{
-      if(!acMenu.contains(e.target) && e.target!==searchInput){ acMenu.style.display='none'; }
-    });
+    // ====== By Person (partial match + clickable sort) ======
+    function getAllPlayers(){
+      const names = [];
+      songs.forEach(s=>{ (s.parts||[]).forEach(p=>{ const val=(p.player||'').trim(); if(!val) return; val.split(/[,/&]+/).map(x=>x.trim()).filter(Boolean).forEach(n=> names.push(n)); }); });
+      return Array.from(new Set(names)).sort((a,b)=> collator.compare(a,b));
+    }
+    function renderPersonResults(name){
+      personTableBody.innerHTML='';
+      if(!name){ personEmpty.style.display='block'; return; }
+      const needle = name.toLowerCase(); const rows=[];
+      songs.forEach(s=>{ (s.parts||[]).forEach(p=>{ const txt=(p.player||'').trim(); if(!txt) return; const tokens = txt.split(/[,/&]+/).map(x=>x.trim()).filter(Boolean); const match = tokens.some(t=> t.toLowerCase().includes(needle)); if(match){ rows.push({ title:s.title, artist:s.artist, version:s.version||'', part:p.label, ref:p.ref||'', misc:p.misc||'' }); } }); });
+      rows.sort((a,b)=>{ const k=personSort.key; const dir = personSort.dir==='asc'?1:-1; return dir*collator.compare((a[k]||''),(b[k]||'')); });
+      if(rows.length===0){ personEmpty.style.display='block'; return; }
+      personEmpty.style.display='none';
+      rows.forEach(r=>{ const tr=document.createElement('tr'); const linkA=r.ref?`<a href="${r.ref}" target="_blank" rel="noopener">열기</a>`:'<span class="muted">-</span>'; const linkB=r.misc?`<a href="${r.misc}" target="_blank" rel="noopener">열기</a>`:'<span class="muted">-</span>'; tr.innerHTML = `<td>${r.title}</td><td>${r.artist}</td><td>${r.version}</td><td>${r.part}</td><td>${linkA}</td><td>${linkB}</td>`; personTableBody.appendChild(tr); });
+    }
+    function openPersonDlg(){ personInput.value=''; personAcMenu.style.display='none'; renderPersonResults(''); updatePersonHeader(); personDlg.showModal(); setTimeout(()=> personInput.focus(), 50); }
+    byPersonBtn.addEventListener('click', openPersonDlg);
+    closePersonDlg.addEventListener('click', ()=> personDlg.close());
+    personInput.addEventListener('input', ()=>{ const q=personInput.value.trim().toLowerCase(); const all=getAllPlayers(); let cand=all; if(q) cand=all.filter(n=> n.toLowerCase().includes(q)); cand=cand.slice(0,8); if(cand.length===0){ personAcMenu.style.display='none'; personAcMenu.innerHTML=''; return; } personAcMenu.innerHTML = cand.map(v=> `<div class=\"ac-item\" data-value=\"${v.replaceAll('"','&quot;')}\">${v}</div>`).join(''); personAcMenu.style.display='block'; });
+    personAcMenu.addEventListener('click', (e)=>{ const item=e.target.closest('.ac-item'); if(!item) return; personInput.value=item.dataset.value||''; personAcMenu.style.display='none'; renderPersonResults(personInput.value.trim()); });
+    personClear.addEventListener('click', ()=>{ personInput.value=''; personAcMenu.style.display='none'; renderPersonResults(''); });
+    document.addEventListener('click', (e)=>{ if(personDlg.open && !personAcMenu.contains(e.target) && e.target!==personInput){ personAcMenu.style.display='none'; } });
 
-    clearSearch.addEventListener('click', ()=>{ searchInput.value=''; acMenu.style.display='none'; render(); });
+    // ====== BOARD ======
+    let posts = read(LS_POSTS, []); // {id,title,body,author,createdAt,updatedAt,comments?}
+    posts = posts.map(p=> ({ ...p, comments: Array.isArray(p.comments) ? p.comments : [] }));
+    write(LS_POSTS, posts);
 
-    // ==== Import/Export ====
-    exportBtn.addEventListener('click', ()=>{
-      const blob = new Blob([JSON.stringify(songs,null,2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'kish_band_playlist.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    });
+    const boardTableBody = document.querySelector('#boardTable tbody');
+    const boardEmpty = document.getElementById('boardEmpty');
+    const postNewBtn = document.getElementById('postNewBtn');
 
-    importFile.addEventListener('change', async (e)=>{
-      const file = e.target.files?.[0];
-      if(!file) return;
-      try{
-        const text = await file.text();
-        const data = JSON.parse(text);
-        if(!Array.isArray(data)) throw new Error('형식 오류');
-        songs = normalizeAllSongs(data);
-        saveSongs(songs);
-        render();
-      }catch(err){
-        alert('가져오기 실패: JSON 형식을 확인하세요.');
-      } finally {
-        importFile.value = '';
+    const postDlg = document.getElementById('postDlg');
+    const postForm = document.getElementById('postForm');
+    const postDlgTitle = document.getElementById('postDlgTitle');
+    const closePostDlg = document.getElementById('closePostDlg');
+    const cancelPostBtn = document.getElementById('cancelPostBtn');
+    const postTitle = document.getElementById('postTitle');
+    const postBody = document.getElementById('postBody');
+
+    const postViewDlg = document.getElementById('postViewDlg');
+    const postViewTitle = document.getElementById('postViewTitle');
+    const postMeta = document.getElementById('postMeta');
+    const postViewBody = document.getElementById('postViewBody');
+    const postViewActions = document.getElementById('postViewActions');
+    const commentsWrap = document.getElementById('commentsWrap');
+    const commentBody = document.getElementById('commentBody');
+    const addCommentBtn = document.getElementById('addCommentBtn');
+    const cancelCommentBtn = document.getElementById('cancelCommentBtn');
+    const closePostViewDlg = document.getElementById('closePostViewDlg');
+
+    let editingPostId = null;
+    let viewingPostId = null;
+
+    function renderBoard(){
+      const rows = posts.slice().sort((a,b)=> b.createdAt - a.createdAt);
+      boardTableBody.innerHTML='';
+      if(rows.length===0){ boardEmpty.style.display='block'; return; }
+      boardEmpty.style.display='none';
+      rows.forEach((p,idx)=>{
+        const tr=document.createElement('tr');
+        const canEdit = session && (session.name==='admin' || session.name===p.author);
+        const titleBtn = `<button class='btn ghost' data-act='open' style='padding:0;color:var(--accent)'>${p.title}</button>`;
+        tr.innerHTML = `<td>${idx+1}</td><td>${titleBtn}</td><td>${p.author}</td><td>${fmtDate(p.createdAt)}</td><td>${canEdit?'<button class=\'btn\' data-act=\'edit\'>편집</button> <button class=\'btn danger\' data-act=\'del\'>삭제</button>':''}</td>`;
+        tr.querySelector('[data-act=open]')?.addEventListener('click', ()=> openViewPost(p.id));
+        tr.querySelector('[data-act=edit]')?.addEventListener('click', ()=> openEditPost(p.id));
+        tr.querySelector('[data-act=del]')?.addEventListener('click', ()=> deletePost(p.id));
+        boardTableBody.appendChild(tr);
+      });
+    }
+
+    function openNewPost(){ editingPostId=null; postDlgTitle.textContent='글쓰기'; postTitle.value=''; postBody.value=''; postDlg.showModal(); setTimeout(()=> postTitle.focus(), 50); }
+    function openEditPost(id){ const p=posts.find(x=>x.id===id); if(!p) return; editingPostId=id; postDlgTitle.textContent='글 수정'; postTitle.value=p.title; postBody.value=p.body; postDlg.showModal(); setTimeout(()=> postTitle.focus(), 50); }
+    function deletePost(id){
+      const p = posts.find(x=>x.id===id); if(!p) return;
+      if(!confirm('이 글을 삭제할까요?')) return; posts = posts.filter(x=>x.id!==id); write(LS_POSTS, posts); renderBoard(); addLog('post_deleted', {title:p.title, author:p.author});
+    }
+
+    postNewBtn.addEventListener('click', ()=>{ if(!session){ alert('로그인이 필요합니다.'); return; } openNewPost(); });
+    postForm.addEventListener('submit', (e)=>{ e.preventDefault(); if(!session){ alert('로그인이 필요합니다.'); return; } const title=postTitle.value.trim(); const body=postBody.value.trim(); if(!title){ alert('제목을 입력하세요.'); return;} if(!body){ alert('내용을 입력하세요.'); return; } if(editingPostId){ posts = posts.map(p=> p.id===editingPostId ? { ...p, title, body, updatedAt: Date.now() } : p); addLog('post_edited', {id: editingPostId, title}); } else { posts.push({ id: uid(), title, body, author: session.name, createdAt: Date.now(), updatedAt: Date.now(), comments: [] }); addLog('post_added', {title}); } write(LS_POSTS, posts); postDlg.close(); renderBoard(); });
+    [closePostDlg, cancelPostBtn].forEach(b=> b.addEventListener('click', ()=> postDlg.close()));
+
+    function openViewPost(id){
+      const p = posts.find(x=>x.id===id); if(!p) return; viewingPostId=id;
+      postViewTitle.textContent = p.title; postViewBody.textContent = p.body; postMeta.textContent = `${p.author} · ${fmtDate(p.createdAt)}`;
+      // viewer actions
+      postViewActions.innerHTML='';
+      if(session && (session.name==='admin' || session.name===p.author)){
+        const eBtn=document.createElement('button'); eBtn.className='btn'; eBtn.textContent='편집'; eBtn.addEventListener('click', ()=>{ postViewDlg.close(); openEditPost(id); });
+        const dBtn=document.createElement('button'); dBtn.className='btn danger'; dBtn.textContent='삭제'; dBtn.addEventListener('click', ()=>{ if(confirm('이 글을 삭제할까요?')){ deletePost(id); postViewDlg.close(); } });
+        postViewActions.appendChild(eBtn); postViewActions.appendChild(dBtn);
+      }
+      renderComments();
+      commentBody.value='';
+      postViewDlg.showModal();
+    }
+    closePostViewDlg.addEventListener('click', ()=> postViewDlg.close());
+
+    function renderComments(){
+      commentsWrap.innerHTML='';
+      const p = posts.find(x=>x.id===viewingPostId); if(!p) return;
+      const items = (p.comments||[]).slice().sort((a,b)=> a.createdAt - b.createdAt);
+      if(items.length===0){
+        const empty = document.createElement('div'); empty.className='empty'; empty.textContent='댓글이 아직 없습니다.'; commentsWrap.appendChild(empty); return;
+      }
+      items.forEach(c=>{
+        const div=document.createElement('div'); div.className='comment';
+        const head=document.createElement('div'); head.className='commentHead';
+        head.innerHTML = `<div class='muted'>${c.author} · ${fmtDate(c.createdAt)}</div>`;
+        if(session && (session.name==='admin' || session.name===c.author)){
+          const actions=document.createElement('div');
+          const eb=document.createElement('button'); eb.className='btn'; eb.textContent='편집'; eb.addEventListener('click', ()=> editComment(c.id));
+          const db=document.createElement('button'); db.className='btn danger'; db.textContent='삭제'; db.addEventListener('click', ()=> deleteComment(c.id));
+          actions.appendChild(eb); actions.appendChild(db); head.appendChild(actions);
+        }
+        const body=document.createElement('div'); body.style.whiteSpace='pre-wrap'; body.style.marginTop='6px'; body.textContent=c.body;
+        div.appendChild(head); div.appendChild(body);
+        commentsWrap.appendChild(div);
+      });
+    }
+
+    function addComment(){
+      if(!session){ alert('로그인이 필요합니다.'); return; }
+      const text = commentBody.value.trim(); if(!text){ alert('댓글 내용을 입력하세요.'); return; }
+      const p = posts.find(x=>x.id===viewingPostId); if(!p) return;
+      p.comments = Array.isArray(p.comments) ? p.comments : [];
+      p.comments.push({ id: uid(), body: text, author: session.name, createdAt: Date.now() });
+      write(LS_POSTS, posts);
+      commentBody.value='';
+      renderComments();
+    }
+    function editComment(cid){
+      const p = posts.find(x=>x.id===viewingPostId); if(!p) return;
+      const c = (p.comments||[]).find(x=>x.id===cid); if(!c) return;
+      const text = prompt('댓글 수정', c.body);
+      if(text===null) return;
+      c.body = text.trim();
+      write(LS_POSTS, posts);
+      renderComments();
+    }
+    function deleteComment(cid){
+      const p = posts.find(x=>x.id===viewingPostId); if(!p) return;
+      const c = (p.comments||[]).find(x=>x.id===cid); if(!c) return;
+      if(!confirm('이 댓글을 삭제할까요?')) return;
+      p.comments = (p.comments||[]).filter(x=>x.id!==cid);
+      write(LS_POSTS, posts);
+      renderComments();
+      addLog('comment_deleted', {postTitle:p.title, commentAuthor:c.author});
+    }
+    addCommentBtn.addEventListener('click', addComment);
+    cancelCommentBtn.addEventListener('click', ()=> commentBody.value='');
+
+    // ====== Admin: Approvals ======
+    const signupTableBody = document.querySelector('#signupTable tbody');
+    const signupEmpty = document.getElementById('signupEmpty');
+
+    function renderApprovals(){
+      signupTableBody.innerHTML='';
+      if(!signups.length){ signupEmpty.style.display='block'; return; }
+      signupEmpty.style.display='none';
+      signups.slice().sort((a,b)=> a.createdAt-b.createdAt).forEach(s=>{
+        const tr=document.createElement('tr');
+        const part = s.part==='직접입력' ? (s.partCustom||'직접입력') : s.part;
+        tr.innerHTML = `<td>${s.name}</td><td>${s.dept||''}</td><td>${part}</td><td>${fmtDate(s.createdAt)}</td><td><button class='btn' data-act='ok'>승인</button> <button class='btn danger' data-act='no'>거절</button></td>`;
+        tr.querySelector('[data-act=ok]').addEventListener('click', async ()=>{
+          if(users.some(u=> u.name===s.name)) { alert('이미 같은 이름의 계정이 존재합니다.'); return; }
+          users.push({ id: uid(), name:s.name, hash:s.hash, dept:s.dept||'', part:s.part, partCustom:s.partCustom||'', createdAt: Date.now() });
+          write(LS_USERS, users);
+          signups = signups.filter(x=> x!==s); write(LS_SIGNUPS, signups);
+          addLog('signup_approved', {name:s.name, dept:s.dept, part:(s.part==='직접입력'?(s.partCustom||s.part):s.part)});
+          renderApprovals(); renderUsers();
+        });
+        tr.querySelector('[data-act=no]')?.addEventListener('click', ()=>{ signups = signups.filter(x=> x!==s); write(LS_SIGNUPS, signups); addLog('signup_rejected', {name:s.name}); renderApprovals(); });
+        signupTableBody.appendChild(tr);
+      });
+    }
+
+    // ====== Admin: Users (add/edit/delete/reset) ======
+    const usersTableBody = document.querySelector('#usersTable tbody');
+    const usersEmpty = document.getElementById('usersEmpty');
+    const userAddBtn = document.getElementById('userAddBtn');
+
+    const userDlg = document.getElementById('userDlg');
+    const userForm = document.getElementById('userForm');
+    const userDlgTitle = document.getElementById('userDlgTitle');
+    const closeUserDlg = document.getElementById('closeUserDlg');
+    const cancelUserBtn = document.getElementById('cancelUserBtn');
+    const udName = document.getElementById('udName');
+    const udPw = document.getElementById('udPw');
+    const udDept = document.getElementById('udDept');
+    const udPart = document.getElementById('udPart');
+    const udPartCustomWrap = document.getElementById('udPartCustomWrap');
+    const udPartCustom = document.getElementById('udPartCustom');
+
+    let editingUserId = null; // null => add, else edit
+
+    function renderUsers(){
+      usersTableBody.innerHTML='';
+      const data = users.slice().sort((a,b)=> collator.compare(a.name,b.name));
+      if(data.length===0){ usersEmpty.style.display='block'; return; }
+      usersEmpty.style.display='none';
+      data.forEach(u=>{
+        const part = u.part==='직접입력' ? (u.partCustom||'직접입력') : u.part;
+        const tr=document.createElement('tr');
+        const isAdmin = (u.name==='admin');
+        const mgmt = isAdmin? '<span class="muted">(관리자)</span>' : `<button class='btn' data-act='edit'>수정</button> <button class='btn' data-act='reset'>비번 초기화</button> <button class='btn danger' data-act='del'>삭제</button>`;
+        tr.innerHTML = `<td>${u.name}</td><td>${u.dept||''}</td><td>${part||''}</td><td>${fmtDate(u.createdAt)}</td><td>${mgmt}</td>`;
+        if(!isAdmin){
+          tr.querySelector('[data-act=edit]')?.addEventListener('click', ()=> openEditUser(u.id));
+          tr.querySelector('[data-act=reset]')?.addEventListener('click', ()=> resetPassword(u.id));
+          tr.querySelector('[data-act=del]')?.addEventListener('click', ()=> deleteUser(u.id));
+        }
+        usersTableBody.appendChild(tr);
+      });
+    }
+
+    function openAddUser(){
+      editingUserId = null;
+      userDlgTitle.textContent='사용자 추가';
+      udName.value=''; udPw.value=''; udDept.value=''; udPart.value='일렉기타'; udPartCustom.value=''; udPartCustomWrap.style.display='none';
+      document.getElementById('udPwHint').textContent='(새 사용자: 필수 / 수정 시 비워두면 유지)';
+      userDlg.showModal();
+    }
+    function openEditUser(id){
+      const u = users.find(x=>x.id===id); if(!u) return;
+      editingUserId = id;
+      userDlgTitle.textContent='사용자 수정';
+      udName.value=u.name; udPw.value=''; udDept.value=u.dept||''; udPart.value=u.part||'일렉기타'; udPartCustom.value=u.partCustom||''; udPartCustomWrap.style.display = (udPart.value==='직접입력') ? 'block' : 'none';
+      document.getElementById('udPwHint').textContent='(비워두면 비밀번호 변경 없음)';
+      userDlg.showModal();
+    }
+
+    function resetPassword(uidx){
+      const u = users.find(x=>x.id===uidx); if(!u) return;
+      if(u.name==='admin'){ alert('관리자 계정 비밀번호는 이 화면에서 변경할 수 없습니다. (현재: 1111)'); return; }
+      const pw = prompt(`새 비밀번호를 입력하세요 (사용자: ${u.name})`);
+      if(pw===null || pw==='') return;
+      hashHex(pw).then(h=>{ u.hash = h; write(LS_USERS, users); addLog('password_reset', {name:u.name}); alert('비밀번호가 초기화되었습니다.'); });
+    }
+    function deleteUser(uidx){
+      const u = users.find(x=>x.id===uidx); if(!u) return;
+      if(u.name==='admin'){ alert('관리자 계정은 삭제할 수 없습니다.'); return; }
+      if(!confirm(`${u.name} 계정을 삭제할까요?`)) return;
+      users = users.filter(x=> x.id!==uidx); write(LS_USERS, users); renderUsers(); addLog('user_deleted', {name:u.name});
+      if(session && session.name===u.name){ alert('삭제된 계정으로 로그인되어 있어 로그아웃됩니다.'); session=null; localStorage.removeItem(LS_SESSION); location.reload(); }
+    }
+
+    userAddBtn.addEventListener('click', openAddUser);
+    udPart.addEventListener('change', ()=>{ udPartCustomWrap.style.display = (udPart.value==='직접입력') ? 'block' : 'none'; });
+    userForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const name=udName.value.trim(); const pw=udPw.value; const dept=udDept.value.trim(); const part=udPart.value; const partCustom=udPartCustom.value.trim();
+      if(!name){ alert('이름을 입력하세요.'); return; }
+      if(part==='직접입력' && !partCustom){ alert('담당 파트를 직접 입력하세요.'); return; }
+      if(editingUserId){
+        const u = users.find(x=>x.id===editingUserId); if(!u) return;
+        if(name!==u.name && users.some(x=>x.name===name)){ alert('이미 존재하는 이름입니다.'); return; }
+        const oldName = u.name;
+        u.name = name; u.dept = dept; u.part = part; u.partCustom = partCustom;
+        if(pw){ u.hash = await hashHex(pw); }
+        write(LS_USERS, users); renderUsers(); userDlg.close(); addLog('user_edited', {oldName, newName:name});
+        if(session && session.name===oldName){ session.name = name; write(LS_SESSION, session); renderUserBar(); }
+      } else {
+        if(!pw){ alert('새 사용자 비밀번호를 입력하세요.'); return; }
+        if(users.some(u=> u.name===name)) { alert('이미 존재하는 이름입니다.'); return; }
+        const hash = await hashHex(pw);
+        users.push({ id: uid(), name, hash, dept, part, partCustom, createdAt: Date.now() }); write(LS_USERS, users);
+        userDlg.close(); renderUsers(); addLog('user_added', {name});
       }
     });
+    [closeUserDlg, cancelUserBtn].forEach(b=> b.addEventListener('click', ()=> userDlg.close()));
 
-    // Initial
-    render();
+    // ====== Profile (self-edit) ======
+    const profileDlg = document.getElementById('profileDlg');
+    const profileForm = document.getElementById('profileForm');
+    const closeProfileDlg = document.getElementById('closeProfileDlg');
+    const pfName = document.getElementById('pfName');
+    const pfDept = document.getElementById('pfDept');
+    const pfPart = document.getElementById('pfPart');
+    const pfPartCustomWrap = document.getElementById('pfPartCustomWrap');
+    const pfPartCustom = document.getElementById('pfPartCustom');
+    const pfCurPw = document.getElementById('pfCurPw');
+    const pfNewPw = document.getElementById('pfNewPw');
+    const pfNewPw2 = document.getElementById('pfNewPw2');
+
+    function openProfile(){
+      if(!session){ alert('로그인이 필요합니다.'); return; }
+      const u = users.find(x=> x.name===session.name);
+      if(!u){ alert('세션 오류: 사용자를 찾을 수 없습니다.'); return; }
+      const isAdmin = (u.name==='admin');
+      pfName.value = u.name;
+      pfDept.value = u.dept||'';
+      pfPart.value = u.part||'일렉기타';
+      pfPartCustom.value = u.partCustom||'';
+      pfPartCustomWrap.style.display = (pfPart.value==='직접입력') ? 'block':'none';
+      pfCurPw.value=''; pfNewPw.value=''; pfNewPw2.value='';
+      pfName.disabled = isAdmin;
+      pfCurPw.disabled = isAdmin; pfNewPw.disabled = isAdmin; pfNewPw2.disabled = isAdmin;
+      document.getElementById('pfPwHint').textContent = isAdmin ? '(관리자는 여기서 비밀번호를 변경할 수 없습니다. 기본값: 1111)' : '(비밀번호 변경 시에만 입력)';
+      profileDlg.showModal();
+      setTimeout(()=> pfName.focus(), 50);
+    }
+
+    pfPart.addEventListener('change', ()=>{ pfPartCustomWrap.style.display = (pfPart.value==='직접입력') ? 'block' : 'none'; });
+    profileForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      if(!session) return;
+      const u = users.find(x=> x.name===session.name); if(!u) return;
+      const isAdmin = (u.name==='admin');
+      const name = pfName.value.trim();
+      const dept = pfDept.value.trim();
+      const part = pfPart.value;
+      const partCustom = pfPartCustom.value.trim();
+      if(part==='직접입력' && !partCustom){ alert('담당 파트를 직접 입력하세요.'); return; }
+      if(!isAdmin && name!==u.name && users.some(x=> x.name===name)){ alert('이미 존재하는 이름입니다.'); return; }
+      const oldName = u.name;
+      if(!isAdmin) u.name = name;
+      u.dept = dept; u.part = part; u.partCustom = partCustom;
+
+      const cur = pfCurPw.value; const n1 = pfNewPw.value; const n2 = pfNewPw2.value;
+      if(n1 || n2 || cur){
+        if(isAdmin){ alert('관리자 비밀번호는 이 화면에서 변경할 수 없습니다.'); }
+        else {
+          if(!cur){ alert('현재 비밀번호를 입력하세요.'); return; }
+          const curHash = await hashHex(cur);
+          if(curHash !== u.hash){ alert('현재 비밀번호가 일치하지 않습니다.'); return; }
+          if(!n1){ alert('새 비밀번호를 입력하세요.'); return; }
+          if(n1 !== n2){ alert('새 비밀번호가 일치하지 않습니다.'); return; }
+          u.hash = await hashHex(n1);
+          addLog('self_password_changed', {name: u.name});
+        }
+      }
+      write(LS_USERS, users);
+      if(session && session.name===oldName && !isAdmin){ session.name = u.name; write(LS_SESSION, session); renderUserBar(); }
+      addLog('self_edited', {oldName, newName: u.name});
+      profileDlg.close();
+      if(document.querySelector('#tab-admin').style.display!=='none'){ renderUsers(); }
+    });
+    [closeProfileDlg].forEach(b=> b.addEventListener('click', ()=> profileDlg.close()));
+
+    // ====== Admin Logs ======
+    const logsTableBody = document.querySelector('#logsTable tbody');
+    const logsEmpty = document.getElementById('logsEmpty');
+    const logsClearBtn = document.getElementById('logsClearBtn');
+    const logsExportBtn = document.getElementById('logsExportBtn');
+
+    function friendly(action, meta){
+      switch(action){
+        case 'bootstrap_admin': return '관리자 계정 초기 생성';
+        case 'signup_approved': return `가입 승인: ${meta.name}`;
+        case 'signup_rejected': return `가입 거절: ${meta.name}`;
+        case 'user_added': return `사용자 추가: ${meta.name}`;
+        case 'user_edited': return `사용자 수정: ${meta.oldName} → ${meta.newName}`;
+        case 'user_deleted': return `사용자 삭제: ${meta.name}`;
+        case 'password_reset': return `비번 초기화: ${meta.name}`;
+        case 'self_edited': return `내 정보 수정: ${meta.oldName} → ${meta.newName}`;
+        case 'self_password_changed': return `내 비밀번호 변경`;
+        case 'song_added': return `곡 추가: ${meta.title} / ${meta.artist}`;
+        case 'song_edited': return `곡 수정: ${meta.title} / ${meta.artist}`;
+        case 'song_deleted': return `곡 삭제: ${meta.title} / ${meta.artist}`;
+        case 'post_added': return `글 등록: ${meta.title}`;
+        case 'post_edited': return `글 수정: ${meta.title}`;
+        case 'post_deleted': return `글 삭제: ${meta.title}`;
+        case 'comment_deleted': return `댓글 삭제: ${meta.postTitle}`;
+        default: return action;
+      }
+    }`;
+        case 'signup_rejected': return `가입 거절: ${meta.name}`;
+        case 'user_added': return `사용자 추가: ${meta.name}`;
+        case 'user_edited': return `사용자 수정: ${meta.oldName} → ${meta.newName}`;
+        case 'user_deleted': return `사용자 삭제: ${meta.name}`;
+        case 'password_reset': return `비번 초기화: ${meta.name}`;
+        case 'song_added': return `곡 추가: ${meta.title} / ${meta.artist}`;
+        case 'song_edited': return `곡 수정: ${meta.title} / ${meta.artist}`;
+        case 'song_deleted': return `곡 삭제: ${meta.title} / ${meta.artist}`;
+        case 'post_added': return `글 등록: ${meta.title}`;
+        case 'post_edited': return `글 수정: ${meta.title}`;
+        case 'post_deleted': return `글 삭제: ${meta.title}`;
+        case 'comment_deleted': return `댓글 삭제: ${meta.postTitle}`;
+        default: return action;
+      }
+    }
+
+    function renderLogs(){
+      logsTableBody.innerHTML='';
+      const data = logs.slice(0,300); // show latest 300
+      if(data.length===0){ logsEmpty.style.display='block'; return; }
+      logsEmpty.style.display='none';
+      data.forEach(l=>{
+        const tr=document.createElement('tr');
+        const detail = JSON.stringify(l.meta||{}, null, 0);
+        tr.innerHTML = `<td>${fmtDate(l.ts)}</td><td>${l.actor||'-'}</td><td>${friendly(l.action,l.meta)}</td><td><code style="white-space:pre-wrap">${detail}</code></td>`;
+        logsTableBody.appendChild(tr);
+      });
+    }
+
+    logsClearBtn.addEventListener('click', ()=>{ if(!confirm('모든 로그를 비울까요?')) return; logs=[]; write(LS_LOGS, logs); renderLogs(); });
+    logsExportBtn.addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(logs,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='kish_admin_logs.json'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // ====== Tabs ======
+    function showTab(id){
+      document.querySelectorAll('#appScreen section[id^=tab-]').forEach(sec=> sec.style.display='none');
+      document.getElementById('tab-'+id).style.display='block';
+      document.querySelectorAll('#mainTabs .tab').forEach(t=> t.classList.remove('active'));
+      document.querySelector(`#mainTabs .tab[data-tab="${id}"]`).classList.add('active');
+      if(id==='playlist'){ renderSongs(); }
+      if(id==='board'){ renderBoard(); }
+      if(id==='admin'){ renderApprovals(); renderUsers(); renderLogs(); }
+    }
+    mainTabs.addEventListener('click', (e)=>{ const b=e.target.closest('.tab'); if(!b) return; const id=b.dataset.tab; showTab(id); });
+
+    // ====== AUTH Handlers ======
+    tabLogin.addEventListener('click', ()=>{ tabLogin.classList.add('active'); tabSignup.classList.remove('active'); loginPane.style.display='block'; signupPane.style.display='none'; });
+    tabSignup.addEventListener('click', ()=>{ tabSignup.classList.add('active'); tabLogin.classList.remove('active'); loginPane.style.display='none'; signupPane.style.display='block'; });
+
+    suPart.addEventListener('change', ()=>{ suPartCustomWrap.style.display = (suPart.value==='직접입력') ? 'block' : 'none'; });
+
+    signupBtn.addEventListener('click', async ()=>{
+      const name=suName.value.trim(); const pw=suPw.value; const pw2=suPw2.value; const dept=suDept.value.trim(); const part=suPart.value; const partCustom=suPartCustom.value.trim();
+      if(!name||!pw||!pw2){ alert('이름/비밀번호를 입력하세요.'); return; }
+      if(pw!==pw2){ alert('비밀번호가 일치하지 않습니다.'); return; }
+      if(part==='직접입력' && !partCustom){ alert('담당 파트를 직접 입력하세요.'); return; }
+      if(users.some(u=> u.name===name) || signups.some(s=> s.name===name)){ alert('이미 신청 또는 등록된 이름입니다.'); return; }
+      const hash = await hashHex(pw);
+      signups.push({ id: uid(), name, hash, dept, part, partCustom, createdAt: Date.now() }); write(LS_SIGNUPS, signups);
+      alert('회원가입 요청이 접수되었습니다. 관리자 승인을 기다려주세요.');
+      suName.value=''; suPw.value=''; suPw2.value=''; suDept.value=''; suPart.value='일렉기타'; suPartCustom.value=''; suPartCustomWrap.style.display='none';
+    });
+
+    loginBtn.addEventListener('click', async ()=>{
+      const name=loginName.value.trim(); const pw=loginPw.value; if(!name||!pw){ alert('이름/비밀번호를 입력하세요.'); return; }
+      if(name==='admin'){
+        if(pw==='1111'){ session={name}; write(LS_SESSION, session); enterApp(); }
+        else alert('관리자 비밀번호가 올바르지 않습니다.');
+        return;
+      }
+      const user = users.find(u=> u.name===name);
+      if(!user){
+        if(signups.some(s=> s.name===name)) alert('승인 대기 중입니다. 관리자 승인을 기다려주세요.'); else alert('등록된 사용자가 아닙니다. 회원가입 후 승인을 받으세요.');
+        return;
+      }
+      const hash = await hashHex(pw);
+      if(hash!==user.hash){ alert('비밀번호가 올바르지 않습니다.'); return; }
+      session={name}; write(LS_SESSION, session); enterApp();
+    });
+
+    function enterApp(){
+      authScreen.style.display='none'; appScreen.style.display='block';
+      renderUserBar();
+      adminTab.style.display = (session && session.name==='admin') ? 'inline-flex' : 'none';
+      showTab('playlist');
+    }
+
+    // Auto-login if session exists
+    if(session){ enterApp(); }
   </script>
 </body>
 </html>
